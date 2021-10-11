@@ -1,45 +1,34 @@
 import chalk from "chalk";
 import express from "express";
-import http from "http";
-import * as httpProxy from "http-proxy";
-import { createProxyMiddleware } from "http-proxy-middleware";
-import morgan from "morgan";
+import { exchangeInfo } from "./api/v3/exchangeInfo";
+import { time } from "./api/v3/time";
+import { userDataStream } from "./api/v3/userDataStream";
+import WebsocketServer from "./websocket/server";
 
-// Create Express Server
 const app = express();
 
-morgan.token("headers", (req, res) => JSON.stringify(req.headers))
-
-
-app.use(morgan(":method\n\t:url\n\t:headers"));
-
-
-// Configuration
-const PORT = 3000;
-const HOST = "localhost";
-const API_SERVICE_URL = "https://api.binance.com";
-
-
-// Proxy endpoints
-app.use("*", createProxyMiddleware({
-  target: API_SERVICE_URL,
-  changeOrigin: true,
-  onProxyReq: (proxyReq: http.ClientRequest, req: http.IncomingMessage, res: http.ServerResponse, options: httpProxy.ServerOptions) => {
-    if (req.headers['x-mbx-apikey']) {
-      console.error(chalk.red("Sending an API key is not allowed because of security reasons. Script will exit now."));
-      process.exit(1);
-    }
-
-    if (req.url?.includes('/order')) {
-      console.log(req.url);
-      res
-        .writeHead(200, { 'Content-Type': 'application/json;charset=UTF-8' })
-        .end(JSON.stringify({route: 'caught!'}));
-    }
-  }
+app.all("*", ((req, res, next) => {
+  console.log(chalk.blue(`[REQ] ${req.method} ${req.path}`))
+  return next();
 }));
 
-// Start the Proxy
-app.listen(PORT, HOST, () => {
-  console.log(`Starting Proxy at ${HOST}:${PORT}`);
+app.use("/api/v3/exchangeInfo", exchangeInfo);
+app.use("/api/v3/userDataStream", userDataStream);
+app.use("/api/v3/time", time);
+
+app.get("*", (req, res) => {
+  const msg = `Route ${req.url} could not be found`;
+  console.error(msg);
+
+  res.status(404).send(msg);
+});
+
+app.disable("x-powered-by");
+
+const server = new WebsocketServer(app);
+
+//start our server
+server.serverInstance.listen(process.env.PORT || 8080, () => {
+  //@ts-ignore
+  console.log(`Server started on port ${server.serverInstance.address()!.port}`);
 });

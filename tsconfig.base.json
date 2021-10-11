@@ -16,6 +16,6 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "sourceMap": true,
-    "strict": true,
+    "strict": true
   }
 }
