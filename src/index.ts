@@ -13,6 +13,7 @@ app.all("*", ((req, res, next) => {
   return next();
 }));
 
+app.use(express.urlencoded({ extended: true }));
 app.use("/api/v3/exchangeInfo", exchangeInfo);
 app.use("/api/v3/userDataStream", userDataStream);
 app.use("/api/v3/time", time);
