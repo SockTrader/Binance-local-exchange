@@ -1,12 +1,23 @@
 import { QueryEntity } from '@datorama/akita';
-import { singleton } from '@ood/singleton';
+import { Order, OrderStatus_LT } from 'binance-api-node';
+import { inject, injectable } from 'inversify';
+import { Observable } from 'rxjs';
+import { OpenOrder } from './order.interfaces';
 import { OrderState, OrderStore } from './order.store';
 
-@singleton
+@injectable()
 export class OrderQuery extends QueryEntity<OrderState> {
-  constructor(protected store: OrderStore) {
+  constructor(
+    @inject(OrderStore) protected store: OrderStore
+  ) {
     super(store);
   }
-}
 
-export default new OrderQuery(new OrderStore());
+  getOpenOrdersForSymbol$(symbol: string): Observable<(Order | OpenOrder)[]> {
+    return this.selectAll({
+      filterBy: order => {
+        return (<OrderStatus_LT[]>['NEW', 'PARTIALLY_FILLED']).includes(order.status) && order.symbol === symbol
+      }
+    });
+  }
+}

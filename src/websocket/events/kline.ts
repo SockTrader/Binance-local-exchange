@@ -1,6 +1,8 @@
+import { Candle } from 'binance-api-node';
 import http from 'http';
 import WebSocket from 'ws';
-import Binance, { Candle } from 'binance-api-node';
+import container from '../../container';
+import { BinanceService } from '../../services/binance.service';
 
 export const getPairFromStream = (streamName: string): string => {
   return streamName.split('@')[0].replace('/', '');
@@ -11,7 +13,7 @@ export const getPeriodFromStream = (streamName: string): string => {
 }
 
 export const klineEventHandler = (connection: WebSocket, request: http.IncomingMessage) => {
-  const client = Binance();
+  const binanceService = container.resolve(BinanceService);
 
   const streamName = request?.url;
   if (!streamName) throw new Error(`Invalid stream name: ${streamName}`);
@@ -24,5 +26,5 @@ export const klineEventHandler = (connection: WebSocket, request: http.IncomingM
   };
 
   //@ts-ignore
-  client.ws.candles(pair, period, candleCallback, false);
+  binanceService.getClient().ws.candles(pair, period, candleCallback, false);
 };

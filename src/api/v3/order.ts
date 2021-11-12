@@ -1,8 +1,10 @@
 import { NewOrderSpot } from 'binance-api-node';
-import { Request, Router } from 'express';
+import { Request, RequestHandler, Router } from 'express';
+import { firstValueFrom } from 'rxjs';
 import { v4 as uuid } from 'uuid';
+import container from '../../container';
 import { OrderService } from '../../services/order.service';
-import exchangeInfoQuery from '../../store/exchangeInfo.query';
+import { OrderMatchingService } from '../../services/orderMatching.service';
 import { OrderStore } from '../../store/order.store';
 
 const router = Router();
@@ -65,26 +67,30 @@ export const getFULLResponse = (data: NewOrderSpot) => ({
   ]
 });
 
-router.post('', async (req: Request<{}, any, NewOrderSpot>, res) => {
-  const data: NewOrderSpot = { ...req.body, ...req.query };
-  const responseType: OrderResponseType = determineResponseType(data);
+export const OrderHandler: RequestHandler = async (req: Request<{}, any, NewOrderSpot>, res) => {
+  const order: NewOrderSpot = { ...req.body, ...req.query };
 
-  const orderService = new OrderService(
-    new OrderStore(),
-    exchangeInfoQuery
-  );
+  const orderService = container.resolve(OrderService);
 
-  await orderService.addFromOrderSpot(data);
+  const clientOrderId = await orderService.addFromOrderSpot(order);
+  const confirmedOrder = await firstValueFrom(orderService.getConfirmedOrder$(order, clientOrderId));
 
-  if (responseType === OrderResponseType.ACK) {
-    return res.json(getACKResponse(data));
-  } else if (responseType === OrderResponseType.RESULT) {
-    return res.json(getRESULTResponse(data));
-  } else if (responseType === OrderResponseType.FULL) {
-    return res.json(getFULLResponse(data));
-  } else {
-    throw new Error(`Unknown responseType: ${responseType}`);
-  }
-});
+  debugger;
+  return confirmedOrder;
+  // @TODO map to response (Observable?)
+
+  const responseType: OrderResponseType = determineResponseType(order);
+  //if (responseType === OrderResponseType.ACK) {
+  //  return res.json(getACKResponse(data));
+  //} else if (responseType === OrderResponseType.RESULT) {
+  //  return res.json(getRESULTResponse(data));
+  //} else if (responseType === OrderResponseType.FULL) {
+  //  return res.json(getFULLResponse(data));
+  //} else {
+  //  throw new Error(`Unknown responseType: ${responseType}`);
+  //}
+};
+
+router.post('', OrderHandler);
 
 export const order = router;

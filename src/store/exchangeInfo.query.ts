@@ -1,12 +1,14 @@
 import { QueryEntity } from '@datorama/akita';
-import { singleton } from '@ood/singleton';
-import { map, Observable } from 'rxjs';
 import { Symbol } from 'binance-api-node';
+import { inject, injectable } from 'inversify';
+import { map, Observable } from 'rxjs';
 import { ExchangeInfoState, ExchangeInfoStore } from './exchangeInfo.store';
 
-@singleton
+@injectable()
 export class ExchangeInfoQuery extends QueryEntity<ExchangeInfoState> {
-  constructor(protected store: ExchangeInfoStore) {
+  constructor(
+    @inject(ExchangeInfoStore) protected store: ExchangeInfoStore
+  ) {
     super(store);
   }
 
@@ -18,5 +20,3 @@ export class ExchangeInfoQuery extends QueryEntity<ExchangeInfoState> {
     );
   }
 }
-
-export default new ExchangeInfoQuery(new ExchangeInfoStore());

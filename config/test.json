@@ -1,0 +1,10 @@
+{
+  "local": {
+    "time": true,
+    "exchangeInfo": true
+  },
+  "fees": {
+    "maker": 0.001,
+    "taker": 0.001
+  }
+}

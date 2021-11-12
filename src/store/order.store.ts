@@ -1,11 +1,12 @@
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
-import { singleton } from '@ood/singleton';
 import { Order } from 'binance-api-node';
+import { injectable } from 'inversify';
+import { OpenOrder } from './order.interfaces';
 
-export interface OrderState extends EntityState<Order, number> {
+export interface OrderState extends EntityState<OpenOrder | Order, string> {
 }
 
-@singleton
+@injectable()
 @StoreConfig({ name: 'order', idKey: 'clientOrderId' })
 export class OrderStore extends EntityStore<OrderState> {
 
