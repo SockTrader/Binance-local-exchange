@@ -1,11 +1,8 @@
-import { NewOrderSpot } from 'binance-api-node';
+import { NewOrderSpot, Order } from 'binance-api-node';
 import { Request, RequestHandler, Router } from 'express';
 import { firstValueFrom } from 'rxjs';
-import { v4 as uuid } from 'uuid';
 import container from '../../container';
 import { OrderService } from '../../services/order.service';
-import { OrderMatchingService } from '../../services/orderMatching.service';
-import { OrderStore } from '../../store/order.store';
 
 const router = Router();
 
@@ -29,66 +26,49 @@ export const determineResponseType = (data: NewOrderSpot): OrderResponseType => 
   return responseType;
 };
 
-export const getACKResponse = (data: NewOrderSpot) => ({
+export const getACKResponse = (data: Order) => ({
   symbol: data.symbol,
-  orderId: 1, // @TODO create unique in-memory number (store)
-  orderListId: -1,
-  clientOrderId: data.newClientOrderId ?? uuid(),
-  transactTime: new Date().getTime(),
+  orderId: data.orderId,
+  orderListId: data.orderListId,
+  clientOrderId: data.clientOrderId,
+  transactTime: data.transactTime,
 });
 
-export const getRESULTResponse = (data: NewOrderSpot) => ({
+export const getRESULTResponse = (data: Order) => ({
   ...getACKResponse(data),
-  price: '0.00000000',
-  origQty: '10.00000000',
-  executedQty: '10.00000000',
-  cummulativeQuoteQty: '10.00000000',
-  status: data.type === 'MARKET' ? 'FILLED' : 'NEW',
-  timeInForce: data.timeInForce ?? 'GTC',
+  price: data.price,
+  origQty: data.origQty,
+  executedQty: data.executedQty,
+  cummulativeQuoteQty: data.cummulativeQuoteQty,
+  status: data.status,
+  timeInForce: data.timeInForce,
   type: data.type,
   side: data.side,
 });
 
-export const getFULLResponse = (data: NewOrderSpot) => ({
+export const getFULLResponse = (data: Order) => ({
   ...getRESULTResponse(data),
-  fills: [
-    {
-      'price': '4000.00000000',
-      'qty': '1.00000000',
-      'commission': '4.00000000',
-      'commissionAsset': 'USDT'
-    },
-    {
-      'price': '3999.00000000',
-      'qty': '5.00000000',
-      'commission': '19.99500000',
-      'commissionAsset': 'USDT'
-    }
-  ]
+  fills: data.fills,
 });
 
 export const OrderHandler: RequestHandler = async (req: Request<{}, any, NewOrderSpot>, res) => {
-  const order: NewOrderSpot = { ...req.body, ...req.query };
+  const request: NewOrderSpot = { ...req.body, ...req.query };
 
   const orderService = container.resolve(OrderService);
 
-  const clientOrderId = await orderService.addFromOrderSpot(order);
-  const confirmedOrder = await firstValueFrom(orderService.getConfirmedOrder$(order, clientOrderId));
+  const clientOrderId = await orderService.addFromOrderSpot(request);
+  const confirmedOrder = await firstValueFrom(orderService.getConfirmedOrder$(request, clientOrderId));
 
-  debugger;
-  return confirmedOrder;
-  // @TODO map to response (Observable?)
-
-  const responseType: OrderResponseType = determineResponseType(order);
-  //if (responseType === OrderResponseType.ACK) {
-  //  return res.json(getACKResponse(data));
-  //} else if (responseType === OrderResponseType.RESULT) {
-  //  return res.json(getRESULTResponse(data));
-  //} else if (responseType === OrderResponseType.FULL) {
-  //  return res.json(getFULLResponse(data));
-  //} else {
-  //  throw new Error(`Unknown responseType: ${responseType}`);
-  //}
+  const responseType: OrderResponseType = determineResponseType(request);
+  if (responseType === OrderResponseType.ACK) {
+    return res.json(getACKResponse(confirmedOrder));
+  } else if (responseType === OrderResponseType.RESULT) {
+    return res.json(getRESULTResponse(confirmedOrder));
+  } else if (responseType === OrderResponseType.FULL) {
+    return res.json(getFULLResponse(confirmedOrder));
+  } else {
+    throw new Error(`Unknown responseType: ${responseType}`);
+  }
 };
 
 router.post('', OrderHandler);

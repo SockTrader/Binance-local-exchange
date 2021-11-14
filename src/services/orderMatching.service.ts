@@ -62,16 +62,16 @@ export class OrderMatchingService {
 
     const price = marketPrice ?? 0;
     const quantity = getBaseQuantity(order, price);
-    const executedQuantity = order.type === 'MARKET' ? quantity : 0;
-    const cumQuoteQuantity = order.type === 'MARKET' ? getQuoteQuantity(order, price) : 0;
+    const executedQuantity = quantity;
+    const cumQuoteQuantity = getQuoteQuantity(order, price);
 
     this.orderStore.update(order.clientOrderId, {
-      price: f(order.type === 'MARKET' ? price : 0, FixedFormat.BAP),
+      price: f(price, FixedFormat.BAP),
       origQty: f(quantity, FixedFormat.BAP),
       executedQty: f(executedQuantity, FixedFormat.BAP),
       cummulativeQuoteQty: f(cumQuoteQuantity, FixedFormat.QAP),
       status: 'FILLED',
-      fills: order.type === 'MARKET' ? this._createFills(order, price, symbol, 2) : [],
+      fills: this._createFills(order, price, symbol, 2),
     });
   }
 
@@ -120,12 +120,7 @@ export class OrderMatchingService {
   }
 
   async matchWithMarketPrice(symbol: string) {
-    const result = await this.binanceService.getClient().prices({ symbol });
-
-    if (!result[symbol]) {
-      throw new Error(`Unable to determine price for symbol "${symbol}"`);
-    }
-
-    await this.match(symbol, parseFloat(result[symbol]));
+    const result = await this.binanceService.getCurrentPrice(symbol);
+    await this.match(symbol, result);
   }
 }

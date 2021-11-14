@@ -25,6 +25,5 @@ export const klineEventHandler = (connection: WebSocket, request: http.IncomingM
     connection.send(JSON.stringify(candle));
   };
 
-  //@ts-ignore
-  binanceService.getClient().ws.candles(pair, period, candleCallback, false);
+  binanceService.getWsCandles(pair, period, candleCallback, false);
 };

@@ -8,7 +8,7 @@ export default jest.fn(() => ({
   _reset: () => {
     candleCallback = undefined;
   },
-  prices: (symbol: string) => {
+  prices: ({ symbol }: { symbol: string }) => {
     const prices: Record<string, string> = {
       'BTCUSDT': '10000.00000000',
       'ETHUSDT': '2500.00000000',

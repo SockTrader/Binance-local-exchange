@@ -1,8 +1,8 @@
-import { NewOrderSpot, OrderStatus, OrderType } from 'binance-api-node';
+import { NewOrderSpot, Order, OrderStatus, OrderType } from 'binance-api-node';
 import { inject, injectable } from 'inversify';
 import { filter, Observable } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { isLimitOrder } from '../order.utils';
+import { isLimitOrder, isMarketOrder } from '../order.utils';
 import { OpenOrder } from '../store/order.interfaces';
 import { OrderQuery } from '../store/order.query';
 import { OrderStore } from '../store/order.store';
@@ -44,6 +44,7 @@ export class OrderService {
       isWorking: true,
       status: 'NEW',
       ...(isLimitOrder(order) && { price: parseFloat(order.price) }),
+      // @TODO verify if still needed..
       ...(('quoteOrderQty' in order) && { quoteOrderQty: parseFloat(order.quoteOrderQty) }),
       ...(('quantity' in order) && { quantity: parseFloat(order.quantity) }),
       //price: f(order.type === 'MARKET' ? price : 0, FixedFormat.BAP),
@@ -54,14 +55,17 @@ export class OrderService {
       //fills: order.type === 'MARKET' ? this._createFills(order, price, symbol, 2) : [],
     });
 
-    if (isLimitOrder(order)) await this.orderMatchingService.matchWithMarketPrice(order.symbol);
+    // @TODO fix order.spec.ts
+    // OrigQty, executedQty, fills and cummulativeQuoteQty should not be empty for LIMIT orders.
+
+    if (isMarketOrder(order)) await this.orderMatchingService.matchWithMarketPrice(order.symbol);
 
     return clientOrderId;
   }
 
-  getConfirmedOrder$(order: NewOrderSpot, clientOrderId: string): Observable<OpenOrder | undefined> {
+  getConfirmedOrder$(order: NewOrderSpot, clientOrderId: string): Observable<Order> {
     return this.orderQuery.selectEntity(clientOrderId).pipe(
-      filter((o): o is OpenOrder => {
+      filter((o): o is Order => {
         return o?.status === (
           (order.type === <OrderType.MARKET>'MARKET') ? <OrderStatus>'FILLED' : <OrderStatus>'NEW'
         );

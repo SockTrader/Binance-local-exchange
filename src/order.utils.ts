@@ -61,3 +61,7 @@ export const isOrderMarketQuote = <T>(order: T): order is WithQuoteQuantity<T> =
 export const isLimitOrder = (order: NewOrderSpot): order is NewOrderLimit => {
   return order.type === <OrderType.LIMIT>'LIMIT'
 }
+
+export const isMarketOrder = (order: NewOrderSpot): order is NewOrderLimit => {
+  return order.type === <OrderType.MARKET>'MARKET'
+}

@@ -1,11 +1,14 @@
 import { NewOrderLimit, NewOrderMarketBase, OrderSide, OrderType } from 'binance-api-node';
+import { exchangeInfoQueryMock } from '../__mocks__/exchangeInfo.query.mock';
 import container from '../container';
+import { ExchangeInfoQuery } from '../store/exchangeInfo.query';
 import { OrderStore } from '../store/order.store';
 import { OrderService } from './order.service';
 
 describe('Order service', () => {
   let orderService: OrderService;
   let orderStore: OrderStore;
+  let addSpy: jest.SpyInstance;
 
   const btcMarketBuy: NewOrderMarketBase = {
     symbol: 'BTCUSDT',
@@ -23,27 +26,33 @@ describe('Order service', () => {
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    container.snapshot();
 
-    orderStore = {
-      add: jest.fn(),
-    } as unknown as OrderStore;
+    container.rebind(ExchangeInfoQuery).toConstantValue(exchangeInfoQueryMock);
 
     orderService = container.resolve(OrderService);
+    orderStore = container.resolve(OrderStore);
+
+    addSpy = jest.spyOn(orderStore, 'add');
+  });
+
+  afterEach(() => {
+    container.restore();
+    jest.clearAllMocks();
   });
 
   it('should have incrementing order id\'s', async () => {
     await orderService.addFromOrderSpot(btcMarketBuy);
     await orderService.addFromOrderSpot(btcMarketBuy);
 
-    expect(orderStore.add).toHaveBeenCalledWith(expect.objectContaining({ orderId: 1 }));
-    expect(orderStore.add).toHaveBeenCalledWith(expect.objectContaining({ orderId: 2 }));
+    expect(addSpy).toHaveBeenCalledWith(expect.objectContaining({ orderId: 1 }));
+    expect(addSpy).toHaveBeenCalledWith(expect.objectContaining({ orderId: 2 }));
   });
 
   it('should add an MARKET Order to the OrderStore', async () => {
     await orderService.addFromOrderSpot(btcMarketBuy);
 
-    expect(orderStore.add).toHaveBeenCalledWith(expect.objectContaining({
+    expect(addSpy).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: expect.any(String),
       symbol: 'BTCUSDT',
       status: 'NEW',
@@ -56,7 +65,7 @@ describe('Order service', () => {
   it('should add an LIMIT Order to the OrderStore', async () => {
     await orderService.addFromOrderSpot(btcLimitSell);
 
-    expect(orderStore.add).toHaveBeenCalledWith(expect.objectContaining({
+    expect(addSpy).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: expect.any(String),
       symbol: 'BTCUSDT',
       status: 'NEW',

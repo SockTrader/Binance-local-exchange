@@ -1,4 +1,5 @@
 import { of } from 'rxjs';
+import { exchangeInfoQueryMock } from '../__mocks__/exchangeInfo.query.mock';
 import container from '../container';
 import { ExchangeInfoQuery } from '../store/exchangeInfo.query';
 import { OpenOrder } from '../store/order.interfaces';
@@ -10,7 +11,6 @@ describe('Order Matching service', () => {
   let orderMatchingService: OrderMatchingService;
   let orderStore: OrderStore;
   let orderQuery: OrderQuery;
-  let exchangeInfoQuery: ExchangeInfoQuery;
 
   const buyOrder: OpenOrder = {
     type: 'MARKET',
@@ -34,90 +34,18 @@ describe('Order Matching service', () => {
   }
 
   beforeEach(() => {
-    exchangeInfoQuery = {
-      getSymbol$: jest.fn(() => of({
-        symbol: 'BTCUSDT',
-        status: 'TRADING',
-        baseAsset: 'BTC',
-        baseAssetPrecision: 8,
-        quoteAsset: 'USDT',
-        quotePrecision: 8,
-        quoteAssetPrecision: 8,
-        baseCommissionPrecision: 8,
-        quoteCommissionPrecision: 8,
-        orderTypes: [
-          'LIMIT',
-          'LIMIT_MAKER',
-          'MARKET',
-          'STOP_LOSS_LIMIT',
-          'TAKE_PROFIT_LIMIT'
-        ],
-        icebergAllowed: true,
-        ocoAllowed: true,
-        quoteOrderQtyMarketAllowed: true,
-        isSpotTradingAllowed: true,
-        isMarginTradingAllowed: true,
-        filters: [
-          {
-            filterType: 'PRICE_FILTER',
-            minPrice: '0.01000000',
-            maxPrice: '1000000.00000000',
-            tickSize: '0.01000000'
-          },
-          {
-            filterType: 'PERCENT_PRICE',
-            multiplierUp: '5',
-            multiplierDown: '0.2',
-            avgPriceMins: 5
-          },
-          {
-            filterType: 'LOT_SIZE',
-            minQty: '0.00001000',
-            maxQty: '9000.00000000',
-            stepSize: '0.00001000'
-          },
-          {
-            filterType: 'MIN_NOTIONAL',
-            minNotional: '10.00000000',
-            applyToMarket: true,
-            avgPriceMins: 5
-          },
-          {
-            filterType: 'ICEBERG_PARTS',
-            limit: 10
-          },
-          {
-            filterType: 'MARKET_LOT_SIZE',
-            minQty: '0.00000000',
-            maxQty: '95.46320577',
-            stepSize: '0.00000000'
-          },
-          {
-            filterType: 'MAX_NUM_ORDERS',
-            maxNumOrders: 200
-          },
-          {
-            filterType: 'MAX_NUM_ALGO_ORDERS',
-            maxNumAlgoOrders: 5
-          }
-        ],
-        permissions: [
-          'SPOT',
-          'MARGIN'
-        ]
-      })),
-    } as unknown as ExchangeInfoQuery;
+    container.snapshot();
 
-    //orderStore = new OrderStore();
-    //orderQuery = new OrderQuery(orderStore);
-
+    container.rebind(ExchangeInfoQuery).toConstantValue(exchangeInfoQueryMock);
     orderMatchingService = container.resolve(OrderMatchingService);
     orderStore = container.resolve(OrderStore);
+    orderQuery = container.resolve(OrderQuery);
 
     orderStore.set([buyOrder, sellOrder]);
   });
 
   afterEach(() => {
+    container.restore();
     jest.clearAllMocks();
   });
 
@@ -141,7 +69,7 @@ describe('Order Matching service', () => {
   });
 
   it('should throw when symbol could not be found in cache', async () => {
-    (exchangeInfoQuery.getSymbol$ as jest.Mock).mockReset().mockReturnValueOnce(of(undefined));
+    (exchangeInfoQueryMock.getSymbol$ as jest.Mock).mockReturnValueOnce(of(undefined));
     await expect(() => orderMatchingService.match('ETHUSDT', 10000)).rejects.toThrowError('Symbol \'ETHUSDT\' could not be found in ExchangeInfo cache.');
   });
 
