@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import chalk from "chalk";
 import express from "express";
 import { exchangeInfo } from "./api/v3/exchangeInfo";
