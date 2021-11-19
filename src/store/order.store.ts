@@ -1,9 +1,17 @@
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
-import { Order } from 'binance-api-node';
 import { injectable } from 'inversify';
-import { OpenOrder } from './order.interfaces';
+import { InternalOrder } from './order.interfaces';
 
-export interface OrderState extends EntityState<OpenOrder | Order, string> {
+export interface OrderState extends EntityState<InternalOrder, string> {
+  orderId: number;
+  tradeId: number;
+}
+
+export function createInitialState(): OrderState {
+  return {
+    orderId: 0,
+    tradeId: 0
+  };
 }
 
 @injectable()
@@ -11,7 +19,23 @@ export interface OrderState extends EntityState<OpenOrder | Order, string> {
 export class OrderStore extends EntityStore<OrderState> {
 
   constructor() {
-    super();
+    super(createInitialState());
+  }
+
+  getNewTradeId(): number {
+    this.update(state => ({
+      tradeId: state.tradeId + 1
+    }));
+
+    return this.getValue().tradeId;
+  }
+
+  createNewOrderId(): number {
+    this.update(state => ({
+      orderId: state.orderId + 1
+    }));
+
+    return this.getValue().orderId;
   }
 
 }

@@ -91,7 +91,7 @@ describe('Order', () => {
         orderId: 1,
         orderListId: -1,
         origQty: '1.00000000',
-        price: 1000,
+        price: '1000.00000000',
         side: 'BUY',
         status: 'NEW',
         symbol: 'BTCUSDT',

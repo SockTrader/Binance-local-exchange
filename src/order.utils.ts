@@ -1,5 +1,4 @@
-import { NewOrderLimit, NewOrderSpot, OrderType, Symbol } from 'binance-api-node';
-import { WithQuantity, WithQuoteQuantity } from './store/order.interfaces';
+import { NewOrderLimit, NewOrderMarketBase, NewOrderMarketQuote, NewOrderSpot, OrderType, Symbol } from 'binance-api-node';
 
 export enum FixedFormat {
   BAP, // baseAssetPrecision
@@ -26,42 +25,10 @@ export const createFixedFormatter = (symbol: Symbol) => (value: number, format: 
   }
 };
 
-export const getBaseQuantity = <T>(order: unknown, price: number): number => {
-  if (isOrderMarketQuote(order)) {
-    return order.quoteOrderQty / price;
-  }
+export const isLimitOrder = (order: NewOrderSpot): order is NewOrderLimit => order.type === <OrderType.LIMIT>'LIMIT'
 
-  if (isOrderMarketBase(order)) {
-    return order.quantity;
-  }
+export const isMarketOrder = (order: NewOrderSpot): order is NewOrderMarketBase | NewOrderMarketQuote => order.type === <OrderType.MARKET>'MARKET'
 
-  throw new Error('Invalid order given');
-}
+export const isMarketOrderBase = (order: NewOrderSpot): order is NewOrderMarketBase => 'quantity' in order;
 
-export const getQuoteQuantity = <T>(order: unknown, price: number): number => {
-  if (isOrderMarketQuote(order)) {
-    return order.quoteOrderQty;
-  }
-
-  if (isOrderMarketBase(order)) {
-    return order.quantity * price;
-  }
-
-  throw new Error('Invalid order given');
-}
-
-export const isOrderMarketBase = <T>(order: T): order is WithQuantity<T> => {
-  return 'quantity' in order;
-}
-
-export const isOrderMarketQuote = <T>(order: T): order is WithQuoteQuantity<T> => {
-  return 'quoteOrderQty' in order;
-}
-
-export const isLimitOrder = (order: NewOrderSpot): order is NewOrderLimit => {
-  return order.type === <OrderType.LIMIT>'LIMIT'
-}
-
-export const isMarketOrder = (order: NewOrderSpot): order is NewOrderLimit => {
-  return order.type === <OrderType.MARKET>'MARKET'
-}
+export const isMarketOrderQuote = (order: NewOrderSpot): order is NewOrderMarketQuote => 'quoteOrderQty' in order;

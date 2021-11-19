@@ -3,6 +3,10 @@
     "src"
   ],
   "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/jest-extended",
+    ],
     "experimentalDecorators": true,
     "baseUrl": ".",
     "target": "es2021",

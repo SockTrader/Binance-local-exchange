@@ -1,8 +1,32 @@
-import { Order } from 'binance-api-node';
+import { Order, OrderFill } from 'binance-api-node';
 
-type OpenOrderBase = Omit<Order, 'price' | 'origQty' | 'executedQty' | 'cummulativeQuoteQty' | 'fills'> & { price?: number };
+export interface InternalOrderFill extends Omit<OrderFill, 'price' | 'qty' | 'commission'> {
+  price: number;
+  qty: number;
+  commission: number;
+}
 
-export type WithQuantity<T> = T & { quantity: number };
-export type WithQuoteQuantity<T> = T & { quoteOrderQty: number };
+export interface InternalBaseOrder extends Omit<Order, 'transactTime' | 'fills' | 'cummulativeQuoteQty' | 'executedQty' | 'icebergQty' | 'origQty' | 'price' | 'stopPrice'> {
+  icebergQty?: number;
+  stopPrice?: number;
+  fills?: InternalOrderFill[];
+  executedQty?: number;
+}
 
-export type OpenOrder = WithQuantity<OpenOrderBase> | WithQuoteQuantity<OpenOrderBase>;
+export type InternalMarketOrder = InternalBaseOrder & {
+  origQty: number;
+  transactTime: number;
+};
+
+export type InternalMarketQuoteOrder = InternalBaseOrder & {
+  cummulativeQuoteQty: number;
+  transactTime: number;
+};
+
+export type InternalLimitOrder = InternalBaseOrder & {
+  price: number;
+  cummulativeQuoteQty?: number;
+  origQty: number;
+};
+
+export type InternalOrder = InternalMarketOrder | InternalMarketQuoteOrder | InternalLimitOrder;

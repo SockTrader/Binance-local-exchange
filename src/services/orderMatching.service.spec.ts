@@ -1,8 +1,7 @@
-import { of } from 'rxjs';
 import { exchangeInfoQueryMock } from '../__mocks__/exchangeInfo.query.mock';
 import container from '../container';
 import { ExchangeInfoQuery } from '../store/exchangeInfo.query';
-import { OpenOrder } from '../store/order.interfaces';
+import { InternalOrder } from '../store/order.interfaces';
 import { OrderQuery } from '../store/order.query';
 import { OrderStore } from '../store/order.store';
 import { OrderMatchingService } from './orderMatching.service';
@@ -12,22 +11,23 @@ describe('Order Matching service', () => {
   let orderStore: OrderStore;
   let orderQuery: OrderQuery;
 
-  const buyOrder: OpenOrder = {
-    type: 'MARKET',
-    symbol: 'BTCUSDT',
-    status: 'NEW',
+  const buyOrder: InternalOrder = {
+    origQty: 1,
     clientOrderId: '1',
-    side: 'BUY',
-    quantity: 1,
     isWorking: true,
     orderId: 1,
     orderListId: -1,
-    timeInForce: 'GTC',
+    side: 'BUY',
+    status: 'NEW',
+    symbol: 'BTCUSDT',
     time: new Date().getTime(),
+    timeInForce: 'GTC',
+    transactTime: new Date().getTime(),
+    type: 'MARKET',
     updateTime: new Date().getTime(),
   }
 
-  const sellOrder: OpenOrder = {
+  const sellOrder: InternalOrder = {
     ...buyOrder,
     clientOrderId: '2',
     side: 'SELL',
@@ -68,56 +68,41 @@ describe('Order Matching service', () => {
     ]))
   });
 
-  it('should throw when symbol could not be found in cache', async () => {
-    (exchangeInfoQueryMock.getSymbol$ as jest.Mock).mockReturnValueOnce(of(undefined));
-    await expect(() => orderMatchingService.match('ETHUSDT', 10000)).rejects.toThrowError('Symbol \'ETHUSDT\' could not be found in ExchangeInfo cache.');
+  it('should correctly calculate commission for a MARKET BUY order', async () => {
+    await orderMatchingService.match('BTCUSDT', 10000);
+
+    const [buy] = orderQuery.getAll().filter(o => o.side === 'BUY');
+    expect(buy.fills?.[0]).toEqual(expect.objectContaining({ commission: 0.0005 }));
   });
 
-  it('should contain filled trades for a MARKET BUY Order', async () => {
+  it('should correctly calculate commission for a MARKET SELL order', async () => {
+    await orderMatchingService.match('BTCUSDT', 10000);
+
+    const [sell] = orderQuery.getAll().filter(o => o.side === 'SELL');
+    expect(sell.fills?.[0]).toEqual(expect.objectContaining({ commission: 5 }));
+  });
+
+  it('should match MARKET BUY order', async () => {
     await orderMatchingService.match('BTCUSDT', 10000);
 
     const [buy] = orderQuery.getAll().filter(o => o.side === 'BUY');
     expect(buy).toEqual(expect.objectContaining({
-      fills: [
-        {
-          commission: '0.00050000',
-          commissionAsset: 'BTC',
-          price: '10000.00000000',
-          qty: '0.50000000',
-          tradeId: 1,
-        },
-        {
-          commission: '0.00050000',
-          commissionAsset: 'BTC',
-          price: '10000.00000000',
-          qty: '0.50000000',
-          tradeId: 2,
-        }
-      ],
-    }));
-  });
-
-  it('should contain filled trades for a MARKET SELL Order', async () => {
-    await orderMatchingService.match('BTCUSDT', 10000);
-
-    const [sell] = orderQuery.getAll().filter(o => o.side === 'SELL');
-    expect(sell).toEqual(expect.objectContaining({
-      fills: [
-        {
-          commission: '5.00000000',
-          commissionAsset: 'USDT',
-          price: '10000.00000000',
-          qty: '0.50000000',
-          tradeId: 3,
-        },
-        {
-          commission: '5.00000000',
-          commissionAsset: 'USDT',
-          price: '10000.00000000',
-          qty: '0.50000000',
-          tradeId: 4,
-        }
-      ],
+      clientOrderId: '1',
+      cummulativeQuoteQty: 10000,
+      executedQty: 1,
+      isWorking: true,
+      orderId: 1,
+      orderListId: -1,
+      origQty: 1,
+      price: 10000,
+      side: 'BUY',
+      status: 'FILLED',
+      symbol: 'BTCUSDT',
+      time: expect.any(Number),
+      timeInForce: 'GTC',
+      transactTime: expect.any(Number),
+      type: 'MARKET',
+      updateTime: expect.any(Number),
     }));
   });
 });

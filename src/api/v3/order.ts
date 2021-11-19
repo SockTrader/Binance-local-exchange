@@ -31,7 +31,7 @@ export const getACKResponse = (data: Order) => ({
   orderId: data.orderId,
   orderListId: data.orderListId,
   clientOrderId: data.clientOrderId,
-  transactTime: data.transactTime,
+  ...(data.transactTime ? {transactTime: data.transactTime} : {}),
 });
 
 export const getRESULTResponse = (data: Order) => ({
@@ -48,7 +48,7 @@ export const getRESULTResponse = (data: Order) => ({
 
 export const getFULLResponse = (data: Order) => ({
   ...getRESULTResponse(data),
-  fills: data.fills,
+  fills: data.fills ?? [],
 });
 
 export const OrderHandler: RequestHandler = async (req: Request<{}, any, NewOrderSpot>, res) => {
@@ -56,7 +56,7 @@ export const OrderHandler: RequestHandler = async (req: Request<{}, any, NewOrde
 
   const orderService = container.resolve(OrderService);
 
-  const clientOrderId = await orderService.addFromOrderSpot(request);
+  const clientOrderId = await orderService.addFromSpotOrder(request);
   const confirmedOrder = await firstValueFrom(orderService.getConfirmedOrder$(request, clientOrderId));
 
   const responseType: OrderResponseType = determineResponseType(request);
