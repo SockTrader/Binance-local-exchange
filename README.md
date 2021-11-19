@@ -48,7 +48,9 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 
 
 ## Contributors
-[<img alt="cwouter" src="https://avatars3.githubusercontent.com/u/1439383?v=4&s=117" width="117">](https://github.com/cwouter)
+<a href="https://github.com/SockTrader/Binance-local-exchange/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=SockTrader/Binance-local-exchange" />
+</a>
 
 
 ## DISCLAIMER
