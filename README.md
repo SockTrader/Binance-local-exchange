@@ -12,12 +12,14 @@ Once the order is settled an ExecutionReport is emitted according to the interfa
 Note that BLE is not 100% local, some endpoints are (always) proxied to Binance.
 For example `kline` events will always be proxied to Binance so that BLE can correctly match the orders internally.
 
+
 ### Getting started
 
 - Clone repo `git clone https://github.com/SockTrader/Binance-local-exchange`
 - Install dependencies `cd Binance-local-exchange && npm install`
 - Start server `npm run start`
 - Use `localhost:8000` (instead of `https://api.binance.com`) in your project to make API calls
+
 
 ### API endpoints
 
@@ -36,8 +38,18 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 | kline          | 🚧 |
 | userDataStream | 🚧 |
 
+
 ## Roadmap
+- Add extra security measurements
 - Spot account trades
 - Margin account trades
 - Configuration
 - ...
+
+
+## Contributors
+[<img alt="cwouter" src="https://avatars3.githubusercontent.com/u/1439383?v=4&s=117" width="117">](https://github.com/cwouter)
+
+
+## DISCLAIMER
+Use at your own risk. Neither SockTrader nor any project contributor can be held responsible for any potential losses.
