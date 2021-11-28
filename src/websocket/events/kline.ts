@@ -3,6 +3,7 @@ import http from 'http';
 import WebSocket from 'ws';
 import container from '../../container';
 import { BinanceService } from '../../services/binance.service';
+import { OrderMatchingService } from '../../services/orderMatching.service';
 
 export const getPairFromStream = (streamName: string): string => {
   return streamName.split('@')[0].replace('/', '');
@@ -14,6 +15,7 @@ export const getPeriodFromStream = (streamName: string): string => {
 
 export const klineEventHandler = (connection: WebSocket, request: http.IncomingMessage) => {
   const binanceService = container.resolve(BinanceService);
+  const orderMatchingService = container.resolve(OrderMatchingService);
 
   const streamName = request?.url;
   if (!streamName) throw new Error(`Invalid stream name: ${streamName}`);
@@ -23,6 +25,7 @@ export const klineEventHandler = (connection: WebSocket, request: http.IncomingM
 
   const candleCallback = (candle: Candle) => {
     connection.send(JSON.stringify(candle));
+    orderMatchingService.matchWithCandle(pair, candle);
   };
 
   binanceService.getWsCandles(pair, period, candleCallback, false);

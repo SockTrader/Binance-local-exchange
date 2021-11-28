@@ -28,14 +28,14 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 | GET    | /api/v3/exchangeInfo   | ✅ |
 | POST   | /api/v3/order          | ✅ |
 | GET    | /api/v3/time           | ✅ |
-| POST   | /api/v3/userDataStream | 🚧 |
+| POST   | /api/v3/userDataStream | ✅ |
 
 
 ### Websocket streams
 
 | Stream         | Implemented   |
 | -------------- | ------------- |
-| kline          | 🚧 |
+| kline          | ✅ |
 | userDataStream | 🚧 |
 
 

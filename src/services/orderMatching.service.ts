@@ -18,9 +18,10 @@ export class OrderMatchingService {
   }
 
   async match(symbol: string, marketPrice: number) {
-    const _symbol = await this.exchangeInfoService.getSymbol(symbol);
     const orders = await firstValueFrom(this.orderQuery.getOpenOrdersForSymbol$(symbol));
+    if (orders.length <= 0) return;
 
+    const _symbol = await this.exchangeInfoService.getSymbol(symbol);
     orders.forEach((order) => {
       this.orderMatchers.forEach(matcher => {
         if (matcher.shouldMatch(order)) {

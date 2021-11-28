@@ -34,6 +34,13 @@ describe('klineEventHandler', () => {
     }));
   });
 
+  it('should throw if stream name is invalid', async () => {
+    const connectionMock = { send: jest.fn()} as unknown as WebSocket;
+    const requestMock = { } as http.IncomingMessage;
+
+    expect(() => klineEventHandler(connectionMock, requestMock)).toThrow('Invalid stream name: undefined')
+  });
+
   it('should extract pair from stream name', () => {
     expect(getPairFromStream('BTC/USDT@kline_1h')).toEqual('BTCUSDT');
     expect(getPairFromStream('BTCUSDT@kline_1h')).toEqual('BTCUSDT');

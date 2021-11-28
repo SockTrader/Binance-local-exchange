@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import chalk from "chalk";
 import express from "express";
-import { exchangeInfo } from "./api/v3/exchangeInfo";
 import { order } from "./api/v3/order";
-import { time } from "./api/v3/time";
+import { time } from './api/v3/time';
+import { exchangeInfo } from "./api/v3/exchangeInfo";
 import { userDataStream } from "./api/v3/userDataStream";
 import WebsocketServer from "./websocket/server";
 
@@ -20,7 +20,7 @@ app.use("/api/v3/userDataStream", userDataStream);
 app.use("/api/v3/time", time);
 app.use("/api/v3/order", order);
 
-app.get("*", (req, res) => {
+app.all("*", (req, res) => {
   const msg = `Route ${req.url} could not be found`;
   console.error(msg);
 

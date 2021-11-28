@@ -51,7 +51,7 @@ export const getFULLResponse = (data: Order) => ({
   fills: data.fills ?? [],
 });
 
-export const OrderHandler: RequestHandler = async (req: Request<{}, any, NewOrderSpot>, res) => {
+export const orderPOSTHandler: RequestHandler = async (req: Request<{}, any, NewOrderSpot>, res) => {
   const request: NewOrderSpot = { ...req.body, ...req.query };
 
   const orderService = container.resolve(OrderService);
@@ -71,6 +71,6 @@ export const OrderHandler: RequestHandler = async (req: Request<{}, any, NewOrde
   }
 };
 
-router.post('', OrderHandler);
+router.post('', orderPOSTHandler);
 
 export const order = router;

@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { exchangeInfoQueryMock } from '../../__mocks__/exchangeInfo.query.mock';
 import container from '../../container';
 import { ExchangeInfoQuery } from '../../store/exchangeInfo.query';
-import { OrderHandler } from './order';
+import { orderPOSTHandler } from './order';
 
 describe('Order', () => {
 
@@ -30,7 +30,7 @@ describe('Order', () => {
     const req = { body: { ...buyOrder, newOrderRespType: 'ACK' }, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
 
-    await OrderHandler(req, res, jest.fn());
+    await orderPOSTHandler(req, res, jest.fn());
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: '1',
@@ -44,7 +44,7 @@ describe('Order', () => {
     const req = { body: buyOrder, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
 
-    await OrderHandler(req, res, jest.fn());
+    await orderPOSTHandler(req, res, jest.fn());
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: '1',
@@ -81,7 +81,7 @@ describe('Order', () => {
     const req = { body: { ...buyOrder, type: 'LIMIT', price: '1000' }, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
 
-    await OrderHandler(req, res, jest.fn());
+    await orderPOSTHandler(req, res, jest.fn());
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
         clientOrderId: '1',
