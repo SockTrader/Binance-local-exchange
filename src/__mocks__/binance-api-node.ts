@@ -16,6 +16,7 @@ export default jest.fn(() => ({
 
     return { [symbol]: prices[symbol] };
   },
+  exchangeInfo: jest.fn(),
   ws: {
     _sendCandles: (candles: Candle[]) => {
       if (!candleCallback) throw new Error('Make sure that ws.candles is called before sending any mocked candles');

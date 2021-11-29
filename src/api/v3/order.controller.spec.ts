@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { exchangeInfoQueryMock } from '../../__mocks__/exchangeInfo.query.mock';
 import container from '../../container';
 import { ExchangeInfoQuery } from '../../store/exchangeInfo.query';
-import { orderPOSTHandler } from './order';
+import { OrderController } from './order.controller';
 
 describe('Order', () => {
 
@@ -15,10 +15,13 @@ describe('Order', () => {
     side: 'BUY',
   }
 
+  let controller: OrderController;
+
   beforeEach(() => {
     container.snapshot();
 
     container.rebind(ExchangeInfoQuery).toConstantValue(exchangeInfoQueryMock);
+    controller = container.resolve(OrderController);
   })
 
   afterEach(() => {
@@ -30,7 +33,7 @@ describe('Order', () => {
     const req = { body: { ...buyOrder, newOrderRespType: 'ACK' }, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
 
-    await orderPOSTHandler(req, res, jest.fn());
+    await controller.postOrder(req, res);
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: '1',
@@ -44,7 +47,7 @@ describe('Order', () => {
     const req = { body: buyOrder, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
 
-    await orderPOSTHandler(req, res, jest.fn());
+    await controller.postOrder(req, res);
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: '1',
@@ -81,7 +84,7 @@ describe('Order', () => {
     const req = { body: { ...buyOrder, type: 'LIMIT', price: '1000' }, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
 
-    await orderPOSTHandler(req, res, jest.fn());
+    await controller.postOrder(req, res);
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
         clientOrderId: '1',
