@@ -38,6 +38,15 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 | kline          | ✅ |
 | userDataStream | 🚧 |
 
+### Internal server endpoints
+
+Can be used to debug or get more information about the internal state of the server
+
+| Method | Path        | Implemented  | Info                                                 |
+| ------ | ----------- | ------------ | ---------------------------------------------------- |
+| GET    | /debug      | ✅           | Returns the state of the internal stores             |
+| GET    | /serverInfo | ✅           | Returns the configuration that is used by the server |
+
 
 ## Roadmap
 - Add extra security measurements
