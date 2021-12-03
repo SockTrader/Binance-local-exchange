@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { Controller } from '../../controller';
-import { UserDataStore } from '../../store/userData.store';
+import { Controller } from '../../../controller';
+import { UserDataStore } from '../../../store/userData.store';
 
 type Endpoints = 'postUserDataStream' | 'putUserDataStream' | 'deleteUserDataStream';
 

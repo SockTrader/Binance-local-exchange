@@ -1,7 +1,7 @@
 import Binance, { Candle } from 'binance-api-node';
 import http from 'http';
 import { WebSocket } from 'ws';
-import container from '../../container';
+import container from '../../../container';
 import { KlineEventHandler } from './kline';
 
 describe('klineEventHandler', () => {

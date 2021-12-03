@@ -1,6 +1,6 @@
 import config from 'config';
 import { Request, Response } from 'express';
-import container from '../../container';
+import container from '../../../container';
 import { ExchangeInfoController } from './exchangeInfo.controller';
 
 jest.mock('config');

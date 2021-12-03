@@ -2,7 +2,7 @@ import Binance from 'binance-api-node';
 import config from 'config';
 import { Request, Response } from 'express';
 import { injectable } from 'inversify';
-import { Controller } from '../../controller';
+import { Controller } from '../../../controller';
 
 @injectable()
 export class TimeController implements Controller<'getTime'>{

@@ -2,8 +2,8 @@ import { Candle } from 'binance-api-node';
 import http from 'http';
 import { inject, injectable } from 'inversify';
 import WebSocket from 'ws';
-import { BinanceService } from '../../services/binance.service';
-import { OrderMatchingService } from '../../services/orderMatching.service';
+import { BinanceService } from '../../../services/binance.service';
+import { OrderMatchingService } from '../../../services/orderMatching.service';
 import { WebsocketEventHandler } from '../websocketEventHandler';
 
 @injectable()

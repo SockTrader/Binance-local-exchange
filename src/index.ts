@@ -1,14 +1,14 @@
 import chalk from 'chalk';
 import express from 'express';
 import 'reflect-metadata';
-import { DebugController } from './server/debug.controller';
-import { ServerInfoController } from './server/serverInfo.controller';
-import { ExchangeInfoController } from './api/v3/exchangeInfo.controller';
-import { OrderController } from './api/v3/order.controller';
-import { TimeController } from './api/v3/time.controller';
-import { UserDataStreamController } from './api/v3/userDataStream.controller';
+import { DebugController } from './endpoints/server/debug.controller';
+import { ServerInfoController } from './endpoints/server/serverInfo.controller';
+import { ExchangeInfoController } from './endpoints/api/v3/exchangeInfo.controller';
+import { OrderController } from './endpoints/api/v3/order.controller';
+import { TimeController } from './endpoints/api/v3/time.controller';
+import { UserDataStreamController } from './endpoints/api/v3/userDataStream.controller';
 import container from './container';
-import WebsocketServer from './websocket/server';
+import WebsocketServer from './endpoints/websocket/server';
 
 const app = express();
 

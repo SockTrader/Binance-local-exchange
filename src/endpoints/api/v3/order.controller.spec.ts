@@ -1,8 +1,8 @@
 import { NewOrderSpot, OrderType } from 'binance-api-node';
 import { Request, Response } from 'express';
-import { exchangeInfoQueryMock } from '../../__mocks__/exchangeInfo.query.mock';
-import container from '../../container';
-import { ExchangeInfoQuery } from '../../store/exchangeInfo.query';
+import { exchangeInfoQueryMock } from '../../../__mocks__/exchangeInfo.query.mock';
+import container from '../../../container';
+import { ExchangeInfoQuery } from '../../../store/exchangeInfo.query';
 import { OrderController } from './order.controller';
 
 describe('Order', () => {

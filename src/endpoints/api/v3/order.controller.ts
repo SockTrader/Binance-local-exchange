@@ -2,8 +2,8 @@ import { NewOrderSpot, Order } from 'binance-api-node';
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { firstValueFrom } from 'rxjs';
-import { Controller } from '../../controller';
-import { OrderService } from '../../services/order.service';
+import { Controller } from '../../../controller';
+import { OrderService } from '../../../services/order.service';
 
 export enum OrderResponseType {
   ACK = 'ACK',

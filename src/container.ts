@@ -11,9 +11,9 @@ import { ExchangeInfoStore } from './store/exchangeInfo.store';
 import { OrderQuery } from './store/order.query';
 import { OrderStore } from './store/order.store';
 import { UserDataStore } from './store/userData.store';
-import { KlineEventHandler } from './websocket/eventHandlers/kline';
-import { UserDataStreamEventHandler } from './websocket/eventHandlers/userDataStream';
-import { WEBSOCKET_EVENT_HANDLER, WebsocketEventHandler } from './websocket/websocketEventHandler';
+import { KlineEventHandler } from './endpoints/websocket/eventHandlers/kline';
+import { UserDataStreamEventHandler } from './endpoints/websocket/eventHandlers/userDataStream';
+import { WEBSOCKET_EVENT_HANDLER, WebsocketEventHandler } from './endpoints/websocket/websocketEventHandler';
 
 const container = new Container({
   skipBaseClassChecks: true,

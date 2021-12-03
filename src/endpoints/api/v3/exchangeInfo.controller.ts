@@ -4,8 +4,8 @@ import { Request, Response } from 'express';
 import { promises as fs } from 'fs';
 import { inject, injectable } from 'inversify';
 import * as path from 'path';
-import { Controller } from '../../controller';
-import { ExchangeInfoStore } from '../../store/exchangeInfo.store';
+import { Controller } from '../../../controller';
+import { ExchangeInfoStore } from '../../../store/exchangeInfo.store';
 
 @injectable()
 export class ExchangeInfoController implements Controller<'getExchangeInfo'> {

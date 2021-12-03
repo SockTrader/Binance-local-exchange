@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { Controller } from '../controller';
-import { OrderQuery } from '../store/order.query';
-import { UserDataQuery } from '../store/userData.query';
+import { Controller } from '../../controller';
+import { OrderQuery } from '../../store/order.query';
+import { UserDataQuery } from '../../store/userData.query';
 
 @injectable()
 export class DebugController implements Controller<'getDebugInfo'> {

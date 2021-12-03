@@ -2,8 +2,8 @@ import http from 'http';
 import WebSocket from 'ws';
 import { inject, injectable } from 'inversify';
 import { filter, withLatestFrom } from 'rxjs';
-import { OrderQuery } from '../../store/order.query';
-import { UserDataQuery } from '../../store/userData.query';
+import { OrderQuery } from '../../../store/order.query';
+import { UserDataQuery } from '../../../store/userData.query';
 import { WebsocketEventHandler } from '../websocketEventHandler';
 
 @injectable()
