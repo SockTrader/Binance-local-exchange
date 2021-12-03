@@ -5,8 +5,7 @@ import { UserDataStreamController } from './userDataStream.controller';
 describe('UserDataStream', () => {
 
   const res = { header: jest.fn(() => res), json: jest.fn() } as unknown as Response<any, any>;
-
-  let controller: UserDataStreamController = container.resolve(UserDataStreamController);
+  const controller: UserDataStreamController = container.resolve(UserDataStreamController);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,9 +32,9 @@ describe('UserDataStream', () => {
   });
 
   it.concurrent.each([
-    [controller.postUserDataStream],
-    [controller.putUserDataStream],
-    [controller.deleteUserDataStream],
+    [controller.postUserDataStream.bind(controller)],
+    [controller.putUserDataStream.bind(controller)],
+    [controller.deleteUserDataStream.bind(controller)],
   ])('Should set X-Local header', async (fn) => {
     await fn({} as Request, res);
     expect(res.header).toHaveBeenCalledWith('X-Local', 'true');

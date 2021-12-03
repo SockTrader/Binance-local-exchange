@@ -9,7 +9,7 @@ type Endpoints = 'postUserDataStream' | 'putUserDataStream' | 'deleteUserDataStr
 export class UserDataStreamController implements Controller<Endpoints> {
 
   constructor(
-    @inject(UserDataStore) private userDataStore: UserDataStore,
+    @inject(UserDataStore) private readonly userDataStore: UserDataStore,
   ) {
   }
 

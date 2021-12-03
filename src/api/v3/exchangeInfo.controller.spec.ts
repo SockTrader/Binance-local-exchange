@@ -1,6 +1,7 @@
 import config from 'config';
 import { Request, Response } from 'express';
-import { exchangeInfoGETHandler } from './exchangeInfo.controller';
+import container from '../../container';
+import { ExchangeInfoController } from './exchangeInfo.controller';
 
 jest.mock('config');
 jest.mock('binance-api-node');
@@ -8,6 +9,7 @@ jest.mock('binance-api-node');
 xdescribe('ExchangeInfo', () => {
 
   const configSpy = jest.spyOn(config, 'get');
+  const controller: ExchangeInfoController = container.resolve(ExchangeInfoController);
 
   describe('As local', () => {
     let req: any;
@@ -27,7 +29,7 @@ xdescribe('ExchangeInfo', () => {
     });
 
     it('Should return local JSON as response', async () => {
-      await exchangeInfoGETHandler(req, res, jest.fn());
+      await controller.getExchangeInfo(req, res);
 
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
         timezone: 'UTC',
@@ -45,21 +47,21 @@ xdescribe('ExchangeInfo', () => {
           expect.objectContaining({
             symbol: 'ETHBTC',
             status: expect.any(String),
-            baseAsset: "ETH",
-            quoteAsset: "BTC",
+            baseAsset: 'ETH',
+            quoteAsset: 'BTC',
           })
         ])
       }));
     });
 
     it('Should set Content-Type header', async () => {
-      await exchangeInfoGETHandler(req, res, jest.fn());
+      await controller.getExchangeInfo(req, res);
 
       expect(res.header).toHaveBeenCalledWith('Content-Type', 'application/json');
     });
 
     it('Should set X-Local header', async () => {
-      await exchangeInfoGETHandler(req, res, jest.fn());
+      await controller.getExchangeInfo(req, res);
 
       expect(res.header).toHaveBeenCalledWith('X-Local', 'true');
     });
@@ -83,13 +85,13 @@ xdescribe('ExchangeInfo', () => {
     });
 
     it('Should set Content-Type header', async () => {
-      await exchangeInfoGETHandler(req, res, jest.fn());
+      await controller.getExchangeInfo(req, res);
 
       expect(res.header).toHaveBeenCalledWith('Content-Type', 'application/json');
     });
 
     it('Should set X-Local header', async () => {
-      await exchangeInfoGETHandler(req, res, jest.fn());
+      await controller.getExchangeInfo(req, res);
 
       expect(res.header).toHaveBeenCalledWith('X-Local', 'false');
     });

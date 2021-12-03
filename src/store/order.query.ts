@@ -20,4 +20,11 @@ export class OrderQuery extends QueryEntity<OrderState> {
       }
     });
   }
+
+  getFilledOrders$(): Observable<InternalOrder[]> {
+    return this.selectAll({
+      filterBy: order => (order.status === <OrderStatus_LT>'FILLED')
+    });
+
+  }
 }
