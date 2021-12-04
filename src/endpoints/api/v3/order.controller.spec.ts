@@ -43,6 +43,21 @@ describe('Order', () => {
     }));
   });
 
+  it('Should return an RESULT response', async () => {
+    const req = { body: { ...buyOrder, newOrderRespType: 'RESULT' }, query: {} } as Request;
+    const res = { json: jest.fn() } as unknown as Response<any, any>;
+
+    await controller.postOrder(req, res);
+
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      clientOrderId: '1',
+      price: '10000.00000000',
+      origQty: '1.00000000',
+      cummulativeQuoteQty: '10000.00000000',
+      executedQty: '1.00000000',
+    }));
+  });
+
   it('should return the FULL response for MARKET orders by default', async () => {
     const req = { body: buyOrder, query: {} } as Request;
     const res = { json: jest.fn() } as unknown as Response<any, any>;
@@ -51,8 +66,7 @@ describe('Order', () => {
 
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       clientOrderId: '1',
-      cummulativeQuoteQty: '10000.00000000',
-      executedQty: '1.00000000',
+
       fills: [
         {
           commission: '0.00050000',
@@ -102,6 +116,13 @@ describe('Order', () => {
         type: 'LIMIT'
       }
     ));
+  });
+
+  it('Should throw if order response type does not exist', async () => {
+    const req = { body: { ...buyOrder, newOrderRespType: 'DOES_NOT_EXIST' }, query: {} } as Request;
+    const res = { json: jest.fn() } as unknown as Response<any, any>;
+
+    await expect(controller.postOrder(req, res)).rejects.toThrowError('Unknown responseType: DOES_NOT_EXIST');
   });
 
 });
