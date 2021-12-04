@@ -1,0 +1,11 @@
+plugins:
+  fixme:
+    enabled: true
+
+  nodesecurity:
+    enabled: true
+
+exclude_patterns:
+  - "**/*.spec.ts"
+  - "**/node_modules"
+  - "docs/"

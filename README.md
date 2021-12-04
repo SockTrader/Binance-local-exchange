@@ -2,6 +2,13 @@
 
 <h1 align="center">Binance Local Exchange</h1>
 
+<p align="center">
+  <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a>
+  <a href="https://codeclimate.com/github/SockTrader/Binance-local-exchange/maintainability"><img src="https://api.codeclimate.com/v1/badges/ef5537a6aa6b8cb10cba/maintainability" /></a>
+  <a href="https://gitter.im/SockTrader/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/SockTrader/community.svg" alt="Gitter"></a>
+</p>
+
+
 ## What is "BLE" or "Binance Local Exchange"
 
 You can interact with BLE as if you would be trading with the real Binance API without taking the risk of making an actual trade.
