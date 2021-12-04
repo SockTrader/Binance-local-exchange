@@ -8,6 +8,6 @@
         "./src",
         "./config"
     ],
-    "exec": "npm start",
+    "exec": "npm start || (sleep 3; touch ./src/index.ts)",
     "ext": "ts"
 }

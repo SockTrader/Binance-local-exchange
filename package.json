@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "start:prod": "npm run build @@ node ./dist/src/index.js",
     "start:test": "concurrently -c \"bgBlue.bold,bgMagenta.bold\" -k -n proxy,socktrader \"npm run start\" \"sleep 5 && cd ../socktrader2 && npm run start\"",
-    "watch": "./node_modules/nodemon/bin/nodemon.js",
+    "watch": "nodemon",
     "build": "rimraf ./build && npx tsc",
     "test": "jest --no-cache --coverage",
     "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --no-cache"

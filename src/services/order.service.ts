@@ -22,6 +22,7 @@ export class OrderService {
 
   async addFromSpotOrder(order: NewOrderSpot) {
     let internalOrder: InternalOrder | undefined = undefined;
+
     if (isLimitOrder(order)) {
       internalOrder = this._getLimitOrder(order);
     } else if (isMarketOrderQuote(order)) {

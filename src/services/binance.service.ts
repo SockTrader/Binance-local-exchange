@@ -4,7 +4,7 @@ import { injectable } from 'inversify';
 @injectable()
 export class BinanceService {
 
-  private static PRICE_CACHE_TIME = 60;
+  private static PRICE_CACHE_TIME = 1000 * 60;
 
   private _client = Binance();
 

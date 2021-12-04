@@ -4,18 +4,22 @@ type CandleCallback = (candle: Candle) => void;
 
 let candleCallback: CandleCallback | undefined;
 
-export default jest.fn(() => ({
-  _reset: () => {
-    candleCallback = undefined;
-  },
-  prices: ({ symbol }: { symbol: string }) => {
-    const prices: Record<string, string> = {
-      'BTCUSDT': '10000.00000000',
-      'ETHUSDT': '2500.00000000',
-    };
+export const prices = jest.fn(({ symbol }: { symbol: string }) => {
+  const prices: Record<string, string> = {
+    'BTCUSDT': '10000.00000000',
+    'ETHUSDT': '2500.00000000',
+  };
 
-    return { [symbol]: prices[symbol] };
-  },
+  return { [symbol]: prices[symbol] };
+});
+
+export const reset = jest.fn(() => {
+  candleCallback = undefined;
+});
+
+export default jest.fn(() => ({
+  _reset: reset,
+  prices: prices,
   exchangeInfo: jest.fn(),
   ws: {
     _sendCandles: (candles: Candle[]) => {

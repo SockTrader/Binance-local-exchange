@@ -17,7 +17,7 @@ export class ExchangeInfoController implements Controller<'getExchangeInfo'> {
 
   async getExchangeInfo(req: Request, res: Response) {
     if (config.get('local.exchangeInfo')) {
-      const filepath = path.join(__dirname, './../../data/exchangeInfo.data.json');
+      const filepath = path.join(__dirname, './../../../data/exchangeInfo.data.json');
       const result = JSON.parse(await fs.readFile(filepath, 'utf8'));
 
       this.exchangeInfoStore.upsertMany(result.symbols);

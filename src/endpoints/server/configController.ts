@@ -4,9 +4,9 @@ import { injectable } from 'inversify';
 import { Controller } from '../../controller';
 
 @injectable()
-export class ServerInfoController implements Controller<'getServerInfo'> {
+export class ConfigController implements Controller<'getConfig'> {
 
-  async getServerInfo(req: Request, res: Response) {
+  async getConfig(req: Request, res: Response) {
     return res
       .header('X-Local', 'true')
       .json(config);

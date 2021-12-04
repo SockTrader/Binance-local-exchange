@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import express from 'express';
 import 'reflect-metadata';
 import { DebugController } from './endpoints/server/debug.controller';
-import { ServerInfoController } from './endpoints/server/serverInfo.controller';
+import { ConfigController } from './endpoints/server/configController';
 import { ExchangeInfoController } from './endpoints/api/v3/exchangeInfo.controller';
 import { OrderController } from './endpoints/api/v3/order.controller';
 import { TimeController } from './endpoints/api/v3/time.controller';
@@ -21,13 +21,14 @@ const timeController = container.resolve(TimeController);
 const orderController = container.resolve(OrderController);
 const userDataStreamController = container.resolve(UserDataStreamController);
 const exchangeInfoController = container.resolve(ExchangeInfoController);
-const serverInfoController = container.resolve(ServerInfoController);
+const configController = container.resolve(ConfigController);
 const debugController = container.resolve(DebugController);
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get('/debug', debugController.getDebugInfo.bind(debugController));
-app.get('/serverInfo', serverInfoController.getServerInfo.bind(serverInfoController));
+app.get('/config', configController.getConfig.bind(configController));
 
 app.get('/api/v3/exchangeInfo', exchangeInfoController.getExchangeInfo.bind(exchangeInfoController));
 app.post('/api/v3/userDataStream', userDataStreamController.postUserDataStream.bind(userDataStreamController));
