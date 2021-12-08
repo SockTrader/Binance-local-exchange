@@ -22,7 +22,7 @@ export default jest.fn(() => ({
   prices: prices,
   exchangeInfo: jest.fn(),
   ws: {
-    _sendCandles: (candles: Candle[]) => {
+    _sendKlineEvent: (candles: any[]) => {
       if (!candleCallback) throw new Error('Make sure that ws.candles is called before sending any mocked candles');
       candles.forEach(candle => {
         if (candleCallback) candleCallback(candle);

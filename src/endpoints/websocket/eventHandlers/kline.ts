@@ -1,4 +1,3 @@
-import { Candle } from 'binance-api-node';
 import http from 'http';
 import { inject, injectable } from 'inversify';
 import WebSocket from 'ws';
@@ -20,11 +19,11 @@ export class KlineEventHandler implements WebsocketEventHandler {
   }
 
   getPairFromStream(streamName: string): string {
-    return streamName.split('@')[0].replace('/', '');
+    return streamName.split('@')[0].replace('/', '').toUpperCase();
   }
 
   getPeriodFromStream(streamName: string): string {
-    return streamName.split('@')[1].replace('kline_', '');
+    return streamName.split('@')[1].replace('kline_', '').toLowerCase();
   }
 
   async onMessage(connection: WebSocket, request: http.IncomingMessage): Promise<void> {
@@ -34,9 +33,9 @@ export class KlineEventHandler implements WebsocketEventHandler {
     const pair = this.getPairFromStream(streamName);
     const period = this.getPeriodFromStream(streamName);
 
-    const candleCallback = (candle: Candle) => {
-      connection.send(JSON.stringify(candle));
-      this.orderMatchingService.matchWithCandle(pair, candle);
+    const candleCallback = (kline: any) => {
+      connection.send(JSON.stringify(kline));
+      this.orderMatchingService.matchWithPrice(pair, parseFloat(kline.k.c));
     };
 
     this.binanceService.getWsCandles(pair, period, candleCallback, false);

@@ -1,7 +1,7 @@
 import http from 'http';
 import WebSocket from 'ws';
 import { inject, injectable } from 'inversify';
-import { filter, withLatestFrom } from 'rxjs';
+import { filter, map, withLatestFrom } from 'rxjs';
 import { OrderQuery } from '../../../store/order.query';
 import { UserDataQuery } from '../../../store/userData.query';
 import { WebsocketEventHandler } from '../websocketEventHandler';
@@ -13,14 +13,15 @@ export class UserDataStreamEventHandler implements WebsocketEventHandler {
 
   private readonly filledOrders$ = this.orderQuery.getFilledOrders$().pipe(
     withLatestFrom(this.userDataQuery.isListening$()),
-    filter(([, isListening]) => !!isListening)
+    filter(([orders, isListening]) => !!isListening && orders.length > 0),
+    map(([orders]) => orders),
   );
 
   constructor(
     @inject(UserDataQuery) private readonly userDataQuery: UserDataQuery,
     @inject(OrderQuery) private readonly orderQuery: OrderQuery,
   ) {
-    this.filledOrders$.subscribe(() => {
+    this.filledOrders$.subscribe((order) => {
       if (this.connection) {
         this.connection.send(JSON.stringify({
           type: 'test'
@@ -28,7 +29,6 @@ export class UserDataStreamEventHandler implements WebsocketEventHandler {
       }
     });
   }
-
 
   async onMessage(connection: WebSocket, request: http.IncomingMessage): Promise<void> {
     if (!this.connection) {

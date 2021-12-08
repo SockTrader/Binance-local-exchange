@@ -1,4 +1,3 @@
-import { Candle } from 'binance-api-node';
 import { inject, injectable, multiInject } from 'inversify';
 import { firstValueFrom } from 'rxjs';
 import { OrderQuery } from '../store/order.query';
@@ -31,8 +30,8 @@ export class OrderMatchingService {
     });
   }
 
-  async matchWithCandle(symbol: string, candle: Candle) {
-    await this.match(symbol, parseFloat(candle.close));
+  async matchWithPrice(symbol: string, closePrice: number) {
+    await this.match(symbol, closePrice);
   }
 
   async matchWithMarketPrice(symbol: string) {
