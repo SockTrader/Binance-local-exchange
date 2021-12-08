@@ -49,10 +49,11 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 
 Can be used to debug or get more information about the internal state of the server
 
-| Method | Path    | Implemented | Info                                                 |
-| ------ | --------| ----------- | ---------------------------------------------------- |
-| GET    | /debug  | ✅          | Returns the state of the internal stores             |
-| GET    | /config | ✅          | Returns the configuration that is used by the server |
+| Method | Path           | Implemented | Body / Query                      | Info                                                 |
+| ------ | -------------- | ----------- | --------------------------------- | ---------------------------------------------------- |
+| GET    | /server/debug  | ✅          |                                   | Returns the state of the internal stores             |
+| GET    | /server/config | ✅          |                                   |Returns the configuration that is used by the server |
+| POST   | /server/match  | ✅          | { symbol: string, price: number } |Tries to match open orders. |
 
 
 ## Roadmap

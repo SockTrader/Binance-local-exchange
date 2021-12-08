@@ -2,12 +2,13 @@ import chalk from 'chalk';
 import express from 'express';
 import 'reflect-metadata';
 import { DebugController } from './endpoints/server/debug.controller';
-import { ConfigController } from './endpoints/server/configController';
+import { ConfigController } from './endpoints/server/config.controller';
 import { ExchangeInfoController } from './endpoints/api/v3/exchangeInfo.controller';
 import { OrderController } from './endpoints/api/v3/order.controller';
 import { TimeController } from './endpoints/api/v3/time.controller';
 import { UserDataStreamController } from './endpoints/api/v3/userDataStream.controller';
 import container from './container';
+import { MatchController } from './endpoints/server/match.controller';
 import WebsocketServer from './endpoints/websocket/server';
 
 const app = express();
@@ -23,12 +24,14 @@ const userDataStreamController = container.resolve(UserDataStreamController);
 const exchangeInfoController = container.resolve(ExchangeInfoController);
 const configController = container.resolve(ConfigController);
 const debugController = container.resolve(DebugController);
+const matchController = container.resolve(MatchController);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('/debug', debugController.getDebugInfo.bind(debugController));
-app.get('/config', configController.getConfig.bind(configController));
+app.get('/server/debug', debugController.getDebugInfo.bind(debugController));
+app.get('/server/config', configController.getConfig.bind(configController));
+app.post('/server/match', matchController.postMatch.bind(matchController));
 
 app.get('/api/v3/exchangeInfo', exchangeInfoController.getExchangeInfo.bind(exchangeInfoController));
 app.post('/api/v3/userDataStream', userDataStreamController.postUserDataStream.bind(userDataStreamController));
