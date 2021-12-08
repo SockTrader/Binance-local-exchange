@@ -30,3 +30,11 @@ export type InternalLimitOrder = InternalBaseOrder & {
 };
 
 export type InternalOrder = InternalMarketOrder | InternalMarketQuoteOrder | InternalLimitOrder;
+
+export type InternalFilledOrder = InternalOrder & {
+  price: number;
+  origQty: number;
+  executedQty: number;
+  transactTime: number;
+  cummulativeQuoteQty: number;
+}

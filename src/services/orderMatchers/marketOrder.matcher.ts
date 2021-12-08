@@ -22,7 +22,7 @@ export class MarketOrderMatcher extends BaseOrderMatcher {
       executedQty: executedQuantity,
       cummulativeQuoteQty: cumQuoteQuantity,
       status: 'FILLED',
-      fills: this._createFills(order, price, symbol, 2),
+      fills: this._createFills(order, price, symbol, 1),
     });
   }
 

@@ -1,8 +1,8 @@
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
 import { injectable } from 'inversify';
-import { InternalOrder } from './order.interfaces';
+import { InternalFilledOrder, InternalOrder } from './order.interfaces';
 
-export interface OrderState extends EntityState<InternalOrder, string> {
+export interface OrderState extends EntityState<InternalOrder | InternalFilledOrder, string> {
   orderId: number;
   tradeId: number;
 }

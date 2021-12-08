@@ -30,6 +30,5 @@ export const internalBuyLimitMock: InternalLimitOrder = {
   time: 1637137810715,
   timeInForce: 'GTC',
   price: 3000,
-  transactTime: 1637137810715,
   updateTime: 1637137810715,
 }

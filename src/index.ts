@@ -1,15 +1,18 @@
+import { akitaConfig } from '@datorama/akita';
 import chalk from 'chalk';
 import express from 'express';
 import 'reflect-metadata';
-import { DebugController } from './endpoints/server/debug.controller';
-import { ConfigController } from './endpoints/server/config.controller';
+import container from './container';
 import { ExchangeInfoController } from './endpoints/api/v3/exchangeInfo.controller';
 import { OrderController } from './endpoints/api/v3/order.controller';
 import { TimeController } from './endpoints/api/v3/time.controller';
 import { UserDataStreamController } from './endpoints/api/v3/userDataStream.controller';
-import container from './container';
+import { ConfigController } from './endpoints/server/config.controller';
+import { DebugController } from './endpoints/server/debug.controller';
 import { MatchController } from './endpoints/server/match.controller';
 import WebsocketServer from './endpoints/websocket/server';
+
+akitaConfig({ resettable: true });
 
 const app = express();
 
@@ -30,6 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get('/server/debug', debugController.getDebugInfo.bind(debugController));
+app.post('/server/debug/reset', debugController.postReset.bind(debugController));
 app.get('/server/config', configController.getConfig.bind(configController));
 app.post('/server/match', matchController.postMatch.bind(matchController));
 

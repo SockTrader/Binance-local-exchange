@@ -24,7 +24,8 @@ export class LimitOrderMatcher extends BaseOrderMatcher {
       transactTime: new Date().getTime(),
       cummulativeQuoteQty: order.origQty * order.price,
       status: 'FILLED',
-      fills: this._createFills(order, price, symbol, 2),
+      // @TODO price is incorrect
+      fills: this._createFills(order, price, symbol, 1),
     });
   }
 
