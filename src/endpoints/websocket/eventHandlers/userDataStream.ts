@@ -1,4 +1,4 @@
-import { Symbol } from 'binance-api-node';
+import { OrderType_LT, Symbol } from 'binance-api-node';
 import http from 'http';
 import { inject, injectable } from 'inversify';
 import { combineLatest, filter, map, mergeMap, Observable, of, withLatestFrom } from 'rxjs';
@@ -17,7 +17,7 @@ export class UserDataStreamEventHandler implements WebsocketEventHandler {
 
   private readonly filledOrderUpdates$ = this.orderQuery.getFilledOrderUpdates$().pipe(
     withLatestFrom(this.userDataQuery.isListening$()),
-    filter(([, isListening]) => !!isListening),
+    filter(([order, isListening]) => !!isListening && order.type != <OrderType_LT>'MARKET'),
     map(([order]) => order),
   );
 
@@ -34,11 +34,11 @@ export class UserDataStreamEventHandler implements WebsocketEventHandler {
     @inject(OrderQuery) private readonly orderQuery: OrderQuery,
   ) {
     this.orderUpdateWithSymbol$.subscribe(([order, symbol]) => {
-      if (this.connection) {
-        this.connection.send(JSON.stringify(
-          this.mapExecutionReport(order, symbol)
-        ));
-      }
+      this.createExecutionReports(order, symbol).forEach((report) => {
+        if (this.connection) {
+          this.connection.send(JSON.stringify(report));
+        }
+      });
     });
   }
 
@@ -52,42 +52,50 @@ export class UserDataStreamEventHandler implements WebsocketEventHandler {
     }
   }
 
-  private mapExecutionReport(order: InternalFilledOrder, symbol: Symbol) {
+  private createExecutionReports(order: InternalFilledOrder, symbol: Symbol) {
     const f = createFixedFormatter(symbol);
-    return {
-      'e': 'executionReport',        // Event type
-      'E': new Date().getTime(),     // Event time
-      's': order.symbol,             // Symbol
-      'c': order.clientOrderId,      // Client order ID
-      'S': order.side,               // Side
-      'o': order.type,               // Order type
-      'f': order.timeInForce,        // Time in force
-      'q': f(order.origQty, FixedFormat.BAP), // Order quantity
-      'p': f(order.price, FixedFormat.BAP), // Order price
-      'P': '0.00000000',             // Stop price
-      'F': '0.00000000',             // Iceberg quantity
-      'g': -1,                       // OrderListId
-      'C': '',                       // Original client order ID; This is the ID of the order being canceled
-      'x': 'TRADE',                  // Current execution type
-      'X': order.status,             // Current order status
-      'r': 'NONE',                   // Order reject reason; will be an error code.
-      'i': order.orderId,            // Order ID
-      'l': '0.00000000',             // Last executed quantity
-      'z': '0.00000000',             // Cumulative filled quantity
-      'L': '0.00000000',             // Last executed price
-      'n': '0',                      // Commission amount
-      'N': null,                     // Commission asset
-      'T': order.transactTime,       // Transaction time
-      't': -1,                       // Trade ID
-      'I': Math.round(Math.random() * 1000), // Ignore
-      'w': true,                     // Is the order on the book?
-      'm': false,                    // Is this trade the maker side?
-      'M': false,                    // Ignore
-      'O': order.time,               // Order creation time
-      'Z': '0.00000000',             // Cumulative quote asset transacted quantity
-      'Y': '0.00000000',             // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
-      'Q': f(order.cummulativeQuoteQty, FixedFormat.QAP) // Quote Order Qty
-    }
-  }
+    let cumQty = 0;
+    let cumQuoteQty = 0;
 
+    return order.fills?.map((fill) => {
+      const quoteQty = fill.price * fill.qty;
+      cumQuoteQty += quoteQty;
+      cumQty += fill.qty;
+
+      return {
+        'e': 'executionReport',        // Event type
+        'E': new Date().getTime(),     // Event time
+        's': order.symbol,             // Symbol
+        'c': order.clientOrderId,      // Client order ID
+        'S': order.side,               // Side
+        'o': order.type,               // Order type
+        'f': order.timeInForce,        // Time in force
+        'q': f(order.origQty, FixedFormat.BAP), // Order quantity
+        'p': f(order.price, FixedFormat.BAP), // Order price
+        'P': f(0, FixedFormat.BAP), // Stop price
+        'F': f(0, FixedFormat.BAP), // Iceberg quantity
+        'g': -1,                       // OrderListId
+        'C': '',                       // Original client order ID; This is the ID of the order being canceled
+        'x': 'TRADE',                  // Current execution type
+        'X': order.status,             // Current order status
+        'r': 'NONE',                   // Order reject reason; will be an error code.
+        'i': order.orderId,            // Order ID
+        'l': fill.qty,                 // Last executed quantity
+        'z': f(cumQty, FixedFormat.BAP), // Cumulative filled quantity
+        'L': fill.price,               // Last executed price
+        'n': f(fill.commission, FixedFormat.QCP), // Commission amount
+        'N': fill.commissionAsset,     // Commission asset
+        'T': order.transactTime,       // Transaction time
+        't': -1,                       // Trade ID
+        'I': Math.round(Math.random() * 1000), // Ignore
+        'w': true,                     // Is the order on the book?
+        'm': false,                    // Is this trade the maker side?
+        'M': false,                    // Ignore
+        'O': order.time,               // Order creation time
+        'Z': f(cumQuoteQty, FixedFormat.QAP), // Cumulative quote asset transacted quantity
+        'Y': f(cumQty, FixedFormat.QAP), // Last quote asset transacted quantity (i.e. lastPrice * lastQty)
+        'Q': f(order.cummulativeQuoteQty, FixedFormat.QAP) // Quote Order Qty
+      }
+    }) ?? [];
+  }
 }
