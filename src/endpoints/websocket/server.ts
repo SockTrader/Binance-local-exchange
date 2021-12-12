@@ -30,9 +30,6 @@ export default class WebsocketServer {
     });
 
     websocketServer.on('connection', (connection, request) => {
-      console.log('url: ', request?.url);
-      console.log('header: ', request.headers);
-
       const remainingHandlers = this.eventHandlers.filter(handler => handler.shouldHandle(request));
 
       if (remainingHandlers.length <= 0) {
@@ -40,11 +37,6 @@ export default class WebsocketServer {
       }
 
       remainingHandlers.forEach(handler => handler.onMessage(connection, request));
-
-      connection.on('message', (message) => {
-        console.log('raw message: ', message);
-        //connection.send(JSON.stringify({ message: "response" }))
-      });
     });
 
     this.serverInstance = server;
