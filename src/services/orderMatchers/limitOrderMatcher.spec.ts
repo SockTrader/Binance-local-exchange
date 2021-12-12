@@ -1,4 +1,4 @@
-import { internalBuyLimitMock } from '../../__mocks__/order.mock';
+import { internalBuyLimitMock, internalSellLimitMock } from '../../__mocks__/order.mock';
 import { btcSymbolMock } from '../../__mocks__/symbol.mock';
 import container from '../../container';
 import { InternalOrder } from '../../store/order.interfaces';
@@ -8,17 +8,13 @@ import { LimitOrderMatcher } from './limitOrder.matcher';
 describe('LimitOrderMatcher', () => {
 
   let orderMatcher: LimitOrderMatcher;
-
-  const orderStoreMock = {
-    update: jest.fn(),
-    getNewTradeId: jest.fn(() => Math.round(Math.random() * 1000)),
-  };
+  let updateOrderStoreSpy: jest.SpyInstance;
 
   beforeEach(() => {
     container.snapshot();
 
-    container.rebind(OrderStore).toConstantValue(orderStoreMock as unknown as OrderStore);
     orderMatcher = container.resolve(LimitOrderMatcher);
+    updateOrderStoreSpy = jest.spyOn(container.resolve(OrderStore), 'update');
   });
 
   afterEach(() => {
@@ -46,7 +42,7 @@ describe('LimitOrderMatcher', () => {
     [3001]
   ])('should not match if price (%i) does not goes below or equals order price (3000)', async (price) => {
     orderMatcher.match(btcSymbolMock, internalBuyLimitMock, price);
-    expect(orderStoreMock.update).not.toHaveBeenCalled();
+    expect(updateOrderStoreSpy).not.toHaveBeenCalled();
   });
 
   it.concurrent.each([
@@ -54,7 +50,7 @@ describe('LimitOrderMatcher', () => {
     [2999]
   ])('should match if price (%i) goes below or equals order price (3000)', async (price) => {
     orderMatcher.match(btcSymbolMock, internalBuyLimitMock, price);
-    expect(orderStoreMock.update).toHaveBeenCalledWith('id-abc', expect.objectContaining({
+    expect(updateOrderStoreSpy).toHaveBeenCalledWith('3', expect.objectContaining({
       status: 'FILLED',
       price: 3000,
       origQty: 1,
@@ -68,7 +64,7 @@ describe('LimitOrderMatcher', () => {
     [2999.99]
   ])('should not match if price (%i) does not goes above or equals order price (3000)', async (price) => {
     orderMatcher.match(btcSymbolMock, { ...internalBuyLimitMock, side: 'SELL' }, price);
-    expect(orderStoreMock.update).not.toHaveBeenCalled();
+    expect(updateOrderStoreSpy).not.toHaveBeenCalled();
   });
 
   it.concurrent.each([
@@ -77,12 +73,40 @@ describe('LimitOrderMatcher', () => {
     [3001]
   ])('should match if price (%i) goes above or equals order price (3000)', async (price) => {
     orderMatcher.match(btcSymbolMock, { ...internalBuyLimitMock, side: 'SELL' }, price);
-    expect(orderStoreMock.update).toHaveBeenCalledWith('id-abc', expect.objectContaining({
+    expect(updateOrderStoreSpy).toHaveBeenCalledWith('3', expect.objectContaining({
       status: 'FILLED',
       price: 3000,
       origQty: 1,
       cummulativeQuoteQty: 3000,
       executedQty: 1,
+    }));
+  });
+
+  it('should charge 3 USDT commission for a LIMIT SELL order @ 3000 USDT', () => {
+    orderMatcher.match(btcSymbolMock, internalSellLimitMock, 10000);
+
+    expect(updateOrderStoreSpy).toHaveBeenCalledWith('4', expect.objectContaining({
+      fills: expect.arrayContaining([{
+        commission: 3,
+        commissionAsset: 'USDT',
+        price: 3000,
+        qty: 1,
+        tradeId: 1,
+      }])
+    }));
+  });
+
+  it('should charge 0.001 BTC commission for a LIMIT BUY order @ 3000 USDT', () => {
+    orderMatcher.match(btcSymbolMock, internalBuyLimitMock, 2000);
+
+    expect(updateOrderStoreSpy).toHaveBeenCalledWith('3', expect.objectContaining({
+      fills: expect.arrayContaining([{
+        commission: 0.001,
+        commissionAsset: 'BTC',
+        price: 3000,
+        qty: 1,
+        tradeId: 1,
+      }])
     }));
   });
 

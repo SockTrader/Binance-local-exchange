@@ -2,7 +2,7 @@ import { InternalLimitOrder, InternalMarketOrder } from '../store/order.interfac
 
 export const internalBuyMarketMock: InternalMarketOrder = {
   origQty: 1,
-  clientOrderId: 'id-abc',
+  clientOrderId: '1',
   isWorking: true,
   orderId: 1,
   orderListId: -1,
@@ -16,6 +16,12 @@ export const internalBuyMarketMock: InternalMarketOrder = {
   updateTime: 1637137810715,
 }
 
+export const internalSellMarketMock: InternalMarketOrder = {
+  ...internalBuyMarketMock,
+  clientOrderId: '2',
+  side: 'SELL',
+}
+
 export const internalBuyLimitMock: InternalLimitOrder = {
   origQty: 1,
   cummulativeQuoteQty: 1,
@@ -23,7 +29,7 @@ export const internalBuyLimitMock: InternalLimitOrder = {
   status: 'NEW',
   type: 'LIMIT',
   symbol: 'BTCUSDT',
-  clientOrderId: 'id-abc',
+  clientOrderId: '3',
   isWorking: true,
   orderId: 1,
   orderListId: -1,
@@ -31,4 +37,10 @@ export const internalBuyLimitMock: InternalLimitOrder = {
   timeInForce: 'GTC',
   price: 3000,
   updateTime: 1637137810715,
+}
+
+export const internalSellLimitMock: InternalLimitOrder = {
+  ...internalBuyLimitMock,
+  clientOrderId: '4',
+  side: 'SELL',
 }

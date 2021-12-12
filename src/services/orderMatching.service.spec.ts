@@ -4,6 +4,8 @@ import { ExchangeInfoQuery } from '../store/exchangeInfo.query';
 import { InternalOrder } from '../store/order.interfaces';
 import { OrderQuery } from '../store/order.query';
 import { OrderStore } from '../store/order.store';
+import { LimitOrderMatcher } from './orderMatchers/limitOrder.matcher';
+import { MarketOrderMatcher } from './orderMatchers/marketOrder.matcher';
 import { OrderMatchingService } from './orderMatching.service';
 
 describe('Order Matching service', () => {
@@ -56,53 +58,23 @@ describe('Order Matching service', () => {
       expect.objectContaining({
         fills: expect.arrayContaining([
           expect.objectContaining({ tradeId: 1 }),
-          expect.objectContaining({ tradeId: 2 }),
         ])
       }),
       expect.objectContaining({
         fills: expect.arrayContaining([
-          expect.objectContaining({ tradeId: 3 }),
-          expect.objectContaining({ tradeId: 4 }),
+          expect.objectContaining({ tradeId: 2 }),
         ])
       }),
     ]))
   });
 
-  it('should correctly calculate commission for a MARKET BUY order', async () => {
+  it('should call correct OrderMatcher', async () => {
+    const marketMatchSpy = jest.spyOn(MarketOrderMatcher.prototype, 'match');
+    const limitMatchSpy = jest.spyOn(LimitOrderMatcher.prototype, 'match');
+
     await orderMatchingService.match('BTCUSDT', 10000);
 
-    const [buy] = orderQuery.getAll().filter(o => o.side === 'BUY');
-    expect(buy.fills?.[0]).toEqual(expect.objectContaining({ commission: 0.0005 }));
-  });
-
-  it('should correctly calculate commission for a MARKET SELL order', async () => {
-    await orderMatchingService.match('BTCUSDT', 10000);
-
-    const [sell] = orderQuery.getAll().filter(o => o.side === 'SELL');
-    expect(sell.fills?.[0]).toEqual(expect.objectContaining({ commission: 5 }));
-  });
-
-  it('should match MARKET BUY order', async () => {
-    await orderMatchingService.match('BTCUSDT', 10000);
-
-    const [buy] = orderQuery.getAll().filter(o => o.side === 'BUY');
-    expect(buy).toEqual(expect.objectContaining({
-      clientOrderId: '1',
-      cummulativeQuoteQty: 10000,
-      executedQty: 1,
-      isWorking: true,
-      orderId: 1,
-      orderListId: -1,
-      origQty: 1,
-      price: 10000,
-      side: 'BUY',
-      status: 'FILLED',
-      symbol: 'BTCUSDT',
-      time: expect.any(Number),
-      timeInForce: 'GTC',
-      transactTime: expect.any(Number),
-      type: 'MARKET',
-      updateTime: expect.any(Number),
-    }));
+    expect(marketMatchSpy).toHaveBeenCalledTimes(2);
+    expect(limitMatchSpy).not.toHaveBeenCalled();
   });
 });

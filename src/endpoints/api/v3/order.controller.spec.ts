@@ -69,17 +69,11 @@ describe('Order', () => {
 
       fills: [
         {
-          commission: '0.00050000',
+          commission: '0.00100000',
           commissionAsset: 'BTC',
           price: '10000.00000000',
-          qty: '0.50000000',
+          qty: '1.00000000',
           tradeId: 1
-        }, {
-          commission: '0.00050000',
-          commissionAsset: 'BTC',
-          price: '10000.00000000',
-          qty: '0.50000000',
-          tradeId: 2
         }
       ],
       orderId: 1,

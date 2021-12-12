@@ -1,7 +1,6 @@
 import { Symbol } from 'binance-api-node';
 import { injectable } from 'inversify';
-import { isInternalLimitOrder } from '../../internalOrder.utils';
-import { InternalOrder } from '../../store/order.interfaces';
+import { InternalLimitOrder, InternalOrder } from '../../store/order.interfaces';
 import { BaseOrderMatcher } from './baseOrderMatcher';
 
 @injectable()
@@ -11,9 +10,7 @@ export class LimitOrderMatcher extends BaseOrderMatcher {
     return order.type === 'LIMIT';
   }
 
-  match(symbol: Symbol, order: InternalOrder, price: number): void {
-    if (!isInternalLimitOrder(order)) throw new Error('Limit order matcher can only match LIMIT orders');
-
+  match(symbol: Symbol, order: InternalLimitOrder, price: number): void {
     if (order.side === 'BUY' && price > order.price) return;
     if (order.side === 'SELL' && price < order.price) return;
 
@@ -24,8 +21,7 @@ export class LimitOrderMatcher extends BaseOrderMatcher {
       transactTime: new Date().getTime(),
       cummulativeQuoteQty: order.origQty * order.price,
       status: 'FILLED',
-      // @TODO price is incorrect
-      fills: this._createFills(order, price, symbol, 1),
+      fills: this._createFills(order, order.price, symbol, 1),
     });
   }
 
