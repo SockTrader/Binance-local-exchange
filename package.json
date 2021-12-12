@@ -51,7 +51,7 @@
     "@swc/core": "^1.2.119",
     "@swc/jest": "^0.2.12",
     "binance-api-node": "^0.11.28",
-    "chalk": "^5.0.0",
+    "chalk": "^4.1.2",
     "config": "^3.3.6",
     "express": "^4.17.1",
     "inversify": "^6.0.1",
