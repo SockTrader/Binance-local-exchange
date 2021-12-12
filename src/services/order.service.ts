@@ -2,7 +2,7 @@ import { NewOrderLimit, NewOrderMarketBase, NewOrderMarketQuote, NewOrderSpot, O
 import { inject, injectable } from 'inversify';
 import { filter, from, map, Observable, switchMap } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { createFixedFormatter, FixedFormat, isLimitOrder, isMarketOrder, isMarketOrderBase, isMarketOrderQuote } from '../order.utils';
+import { createFixedFormatter, FixedFormat, isLimitOrder, isMarketOrder, isMarketOrderBase, isMarketOrderQuote } from '../utils/order.utils';
 import { InternalBaseOrder, InternalLimitOrder, InternalMarketOrder, InternalMarketQuoteOrder, InternalOrder } from '../store/order.interfaces';
 import { OrderQuery } from '../store/order.query';
 import { OrderStore } from '../store/order.store';

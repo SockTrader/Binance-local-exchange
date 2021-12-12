@@ -1,0 +1,9 @@
+**/__mocks__/**
+docs
+coverage
+scripts
+config
+src
+nodemon.json
+jest*
+tsconfig.json

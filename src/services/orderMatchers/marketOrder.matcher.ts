@@ -1,6 +1,6 @@
 import { Symbol } from 'binance-api-node';
 import { injectable } from 'inversify';
-import { getBaseQuantity, getQuoteQuantity } from '../../internalOrder.utils';
+import { getBaseQuantity, getQuoteQuantity } from '../../utils/internalOrder.utils';
 import { InternalOrder } from '../../store/order.interfaces';
 import { BaseOrderMatcher } from './baseOrderMatcher';
 

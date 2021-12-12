@@ -1,4 +1,5 @@
 {
+  "port": 8000,
   "local": {
     "time": true,
     "exchangeInfo": true

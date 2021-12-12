@@ -1,4 +1,4 @@
-import { InternalLimitOrder, InternalMarketOrder, InternalMarketQuoteOrder, InternalOrder } from './store/order.interfaces';
+import { InternalLimitOrder, InternalMarketOrder, InternalMarketQuoteOrder, InternalOrder } from '../store/order.interfaces';
 
 export const getBaseQuantity = (order: InternalOrder, price?: number): number => {
   if (!isInternalMarketQuoteOrder(order)) {

@@ -1,5 +1,5 @@
 import { getBaseQuantity, getQuoteQuantity } from './internalOrder.utils';
-import { InternalOrder } from './store/order.interfaces';
+import { InternalOrder } from '../store/order.interfaces';
 
 describe('InternalOrderUtils', () => {
 

@@ -3,7 +3,7 @@ import http from 'http';
 import { inject, injectable } from 'inversify';
 import { combineLatest, filter, map, mergeMap, Observable, of, withLatestFrom } from 'rxjs';
 import WebSocket from 'ws';
-import { createFixedFormatter, FixedFormat } from '../../../order.utils';
+import { createFixedFormatter, FixedFormat } from '../../../utils/order.utils';
 import { ExchangeInfoService } from '../../../services/exchangeInfo.service';
 import { InternalFilledOrder } from '../../../store/order.interfaces';
 import { OrderQuery } from '../../../store/order.query';

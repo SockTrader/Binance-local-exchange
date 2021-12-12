@@ -1,7 +1,7 @@
 import { OrderType, Symbol } from 'binance-api-node';
 import config from 'config';
 import { inject, injectable } from 'inversify';
-import { getBaseQuantity } from '../../internalOrder.utils';
+import { getBaseQuantity } from '../../utils/internalOrder.utils';
 import { InternalOrder, InternalOrderFill } from '../../store/order.interfaces';
 import { OrderStore } from '../../store/order.store';
 
