@@ -1,14 +1,12 @@
-import config from 'config';
 import { Request, Response } from 'express';
 import container from '../../../container';
 import { ExchangeInfoController } from './exchangeInfo.controller';
 
-jest.mock('config');
+jest.mock('../../../config');
 jest.mock('binance-api-node');
 
 xdescribe('ExchangeInfo', () => {
 
-  const configSpy = jest.spyOn(config, 'get');
   const controller: ExchangeInfoController = container.resolve(ExchangeInfoController);
 
   describe('As local', () => {
@@ -18,8 +16,6 @@ xdescribe('ExchangeInfo', () => {
     beforeEach(() => {
       req = {} as Request;
       res = { json: jest.fn(), header: jest.fn(() => res) } as unknown as Response<any, any>;
-
-      configSpy.mockReturnValueOnce(true);
     });
 
     afterEach(() => {
@@ -74,8 +70,6 @@ xdescribe('ExchangeInfo', () => {
     beforeEach(() => {
       req = {} as Request;
       res = { json: jest.fn(), header: jest.fn(() => res) } as unknown as Response<any, any>;
-
-      configSpy.mockReturnValueOnce(false);
     });
 
     afterEach(() => {

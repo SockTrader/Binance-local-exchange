@@ -1,9 +1,9 @@
 import Binance from 'binance-api-node';
-import config from 'config';
 import { Request, Response } from 'express';
 import { promises as fs } from 'fs';
 import { inject, injectable } from 'inversify';
 import * as path from 'path';
+import { config } from '../../../config';
 import { Controller } from '../../../controller';
 import { ExchangeInfoStore } from '../../../store/exchangeInfo.store';
 
@@ -16,7 +16,7 @@ export class ExchangeInfoController implements Controller<'getExchangeInfo'> {
   }
 
   async getExchangeInfo(req: Request, res: Response) {
-    if (config.get('local.exchangeInfo')) {
+    if (config.local.exchangeInfo) {
       const filepath = path.join(__dirname, './../../../data/exchangeInfo.data.json');
       const result = JSON.parse(await fs.readFile(filepath, 'utf8'));
 

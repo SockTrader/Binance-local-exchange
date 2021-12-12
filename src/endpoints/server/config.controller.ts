@@ -1,6 +1,6 @@
-import config from 'config';
 import { Request, Response } from 'express';
 import { injectable } from 'inversify';
+import { config } from '../../config';
 import { Controller } from '../../controller';
 
 @injectable()

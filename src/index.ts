@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import 'reflect-metadata';
-import config from 'config';
+import { config } from './config';
 import container from './container';
 import { akitaConfig } from '@datorama/akita';
 import { createApplication } from './application';
@@ -14,7 +14,7 @@ const server = container.resolve(WebsocketServer);
 server.upgrade(app);
 
 //start our server
-server.serverInstance?.listen(config.get('port'), () => {
+server.serverInstance?.listen(config.port, () => {
   //@ts-ignore
   console.log(`Server started on port ${server.serverInstance.address()!.port}`);
 });

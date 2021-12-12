@@ -1,6 +1,6 @@
 import { OrderType, Symbol } from 'binance-api-node';
-import config from 'config';
 import { inject, injectable } from 'inversify';
+import { config } from '../../config';
 import { getBaseQuantity } from '../../utils/internalOrder.utils';
 import { InternalOrder, InternalOrderFill } from '../../store/order.interfaces';
 import { OrderStore } from '../../store/order.store';
@@ -20,8 +20,8 @@ export abstract class BaseOrderMatcher {
   protected _createFills(order: InternalOrder, price: number, symbol: Symbol, amount: number = 1): InternalOrderFill[] | undefined {
     const quantity = getBaseQuantity(order, price);
     const commission: number = order.type === <OrderType.MARKET>'MARKET'
-      ? config.get('fees.taker')
-      : config.get('fees.maker');
+      ? config.fees.taker
+      : config.fees.maker;
 
     let fills: InternalOrderFill[] = [];
 
