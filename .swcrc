@@ -11,7 +11,7 @@
         "decoratorMetadata": true,
         "legacyDecorator": true
     },
-    "target": "ES2018",
+    "target": "es2018",
     "loose": false,
     "externalHelpers": true,
     "keepClassNames": false
