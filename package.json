@@ -1,5 +1,5 @@
 {
-  "name": "binance-local-exchange",
+  "name": "@socktrader/binance-local-exchange",
   "version": "0.0.1",
   "description": "Binance local exchange",
   "bin": {
@@ -15,8 +15,12 @@
     "watch": "nodemon",
     "build": "rimraf ./build && npx tsc",
     "test": "jest --no-cache --coverage",
+    "publish:patch": "npm version patch && npm publish",
+    "publish:minor": "npm version minor && npm publish",
+    "publish:major": "npm version major && npm publish",
     "prepublishOnly": "npm run build"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SockTrader/Binance-local-exchange.git"
