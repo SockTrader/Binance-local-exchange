@@ -27,10 +27,10 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 
 ### Help, it's not working?
 
-- I can't create an order: make sure to call GET /api/v3/exchangeInfo. (why?)
+- I can't create an order: make sure to call GET /api/v3/exchangeInfo. ([why?](https://github.com/SockTrader/Binance-local-exchange/wiki/FAQ#i-cant-create-an-order))
 - I am not receiving any executionReports:
-  - make sure to call POST /api/v3/userDataStream. (why?)
-  - make sure to listen for Kline/Candlestick Streams. (why?)
+  - make sure to call POST /api/v3/userDataStream. ([why?](https://github.com/SockTrader/Binance-local-exchange/wiki/FAQ#i-am-not-receiving-any-executionreports))
+  - make sure to listen for Kline/Candlestick Streams. ([why?](https://github.com/SockTrader/Binance-local-exchange/wiki/FAQ#i-am-not-receiving-any-executionreports))
 
 Still not working? Please open a [bug report](https://github.com/SockTrader/Binance-local-exchange/issues/new)
 
