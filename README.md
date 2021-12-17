@@ -20,40 +20,47 @@ Note that BLE is not 100% local, some endpoints are (always) proxied to Binance.
 For example `kline` events will always be proxied to Binance so that BLE can correctly match the orders internally.
 
 
-### Getting started
+### Quick start
 
-- Clone repo `git clone https://github.com/SockTrader/Binance-local-exchange`
-- Install dependencies `cd Binance-local-exchange && npm install`
-- Start server `npm run start`
-- Use `localhost:8000` (instead of `https://api.binance.com`) in your project to make API calls
+- `npx @socktrader/binance-local-exchange`
 
+
+### Help, it's not working?
+
+- I can't create an order: make sure to call GET /api/v3/exchangeInfo. (why?)
+- I am not receiving any executionReports:
+  - make sure to call POST /api/v3/userDataStream. (why?)
+  - make sure to listen for Kline/Candlestick Streams. (why?)
+
+Still not working? Please open a [bug report](https://github.com/SockTrader/Binance-local-exchange/issues/new)
 
 ### API endpoints
 
-| Method | Path                   | Implemented   |
-| ------ | --------------------   | ------------- |
-| GET    | /api/v3/exchangeInfo   | ✅ |
-| POST   | /api/v3/order          | ✅ |
-| GET    | /api/v3/time           | ✅ |
-| POST   | /api/v3/userDataStream | ✅ |
+| Method | Path                   | Implemented |
+|--------|------------------------|-------------|
+| GET    | /api/v3/exchangeInfo   | ✅           |
+| POST   | /api/v3/order          | ✅           |
+| GET    | /api/v3/time           | ✅           |
+| POST   | /api/v3/userDataStream | ✅           |
 
 
 ### Websocket streams
 
-| Stream         | Implemented   |
-| -------------- | ------------- |
-| kline          | ✅ |
-| userDataStream | ✅ |
+| Stream         | Implemented |
+|----------------|-------------|
+| kline          | ✅           |
+| userDataStream | ✅           |
+
 
 ### Internal server endpoints
 
 Can be used to debug or get more information about the internal state of the server
 
 | Method | Path           | Implemented | Body / Query                      | Info                                                 |
-| ------ | -------------- | ----------- | --------------------------------- | ---------------------------------------------------- |
-| GET    | /server/debug  | ✅          |                                   | Returns the state of the internal stores             |
-| GET    | /server/config | ✅          |                                   |Returns the configuration that is used by the server |
-| POST   | /server/match  | ✅          | { symbol: string, price: number } |Tries to match open orders. |
+|--------|----------------|-------------|-----------------------------------|------------------------------------------------------|
+| GET    | /server/debug  | ✅           |                                   | Returns the state of the internal stores             |
+| GET    | /server/config | ✅           |                                   | Returns the configuration that is used by the server |
+| POST   | /server/match  | ✅           | { symbol: string, price: number } | Tries to match open orders.                          |
 
 
 ## Roadmap
@@ -62,6 +69,15 @@ Can be used to debug or get more information about the internal state of the ser
 - Margin account trades
 - Configuration
 - ...
+
+
+## How to contribute?
+
+- Clone repo `git clone https://github.com/SockTrader/Binance-local-exchange`
+- Install dependencies `cd Binance-local-exchange && npm install`
+- Start server `npm run start` or in watch mode `npm run watch`
+- Make code changes, test with Postman, create unit tests
+- Open pull request
 
 
 ## Contributors
