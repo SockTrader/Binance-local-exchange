@@ -23,6 +23,7 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 ### Quick start
 
 - `npx @socktrader/binance-local-exchange`
+- Make api calls or point your trading bot to: `http://localhost:8000`
 
 
 ### Help, it's not working?
@@ -34,7 +35,24 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 
 Still not working? Please open a [bug report](https://github.com/SockTrader/Binance-local-exchange/issues/new)
 
-### API endpoints
+## Configuration
+
+The following configuration options can be configured either by argument or by environment variable.
+
+| Option                      | Env var                | Description                         |
+|-----------------------------|------------------------|-------------------------------------|
+| -V, --version               |                        | output the version number           |
+| -p, --port <number>         | PORT                   | port number (default: 8000)         |
+| -lt, --local-time           | LOCAL_TIME             | local time (default: true)          |
+| -lei, --local-exchange-info | LOCAL_EXCHANGE_INFO    | local exchange info (default: true) |
+| -fm, --fee-maker <number>   | FEES_MAKER             | maker fee (default: 0.001)          |
+| -ft, --fee-taker <number>   | FEES_TAKER             | taker fee (default: 0.001)          |
+| --I-KNOW-WHAT-I-AM-DOING    | I_KNOW_WHAT_I_AM_DOING | removes all security warnings       |
+| -h, --help                  |                        | display help for command            |
+
+For example: `export PORT=8001 && npx @socktrader/binance-local-exchange` or `npx @socktrader/binance-local-exchange -p 8001`
+
+## API endpoints
 
 | Method | Path                   | Implemented |
 |--------|------------------------|-------------|
@@ -65,9 +83,9 @@ Can be used to debug or get more information about the internal state of the ser
 
 ## Roadmap
 - Add extra security measurements
+- Add support for additional API endpoints
 - Spot account trades
 - Margin account trades
-- Configuration
 - ...
 
 

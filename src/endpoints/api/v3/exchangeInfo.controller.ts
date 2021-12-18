@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { promises as fs } from 'fs';
 import { inject, injectable } from 'inversify';
 import * as path from 'path';
-import { config } from '../../../config';
+import { ConfigurationService } from '../../../config';
 import { Controller } from '../../../controller';
 import { ExchangeInfoStore } from '../../../store/exchangeInfo.store';
 
@@ -12,11 +12,12 @@ export class ExchangeInfoController implements Controller<'getExchangeInfo'> {
 
   constructor(
     @inject(ExchangeInfoStore) private readonly exchangeInfoStore: ExchangeInfoStore,
+    @inject(ConfigurationService) private readonly config: ConfigurationService,
   ) {
   }
 
   async getExchangeInfo(req: Request, res: Response) {
-    if (config.local.exchangeInfo) {
+    if (this.config.get('localExchangeInfo')) {
       const filepath = path.join(__dirname, './../../../data/exchangeInfo.data.json');
       const result = JSON.parse(await fs.readFile(filepath, 'utf8'));
 

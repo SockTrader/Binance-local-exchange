@@ -1,15 +1,20 @@
 import { Request, Response } from 'express';
-import { injectable } from 'inversify';
-import { config } from '../../config';
+import { inject, injectable } from 'inversify';
+import { ConfigurationService } from '../../config';
 import { Controller } from '../../controller';
 
 @injectable()
 export class ConfigController implements Controller<'getConfig'> {
 
+  constructor(
+    @inject(ConfigurationService) private readonly config: ConfigurationService,
+  ) {
+  }
+
   async getConfig(req: Request, res: Response) {
     return res
       .header('X-Local', 'true')
-      .json(config);
+      .json(this.config.getAll());
   }
 
 }
