@@ -1,6 +1,6 @@
 {
   "name": "@socktrader/binance-local-exchange",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Binance local exchange",
   "bin": {
     "binance-local-exchange": "./build/index.js",
