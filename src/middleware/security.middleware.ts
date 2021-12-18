@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { NextFunction, Request, Response } from 'express';
-import { ApplicationConfig } from '../config';
+import { ApplicationConfig } from '../services/configuration.service';
 
 export const verifyRequest = (config: ApplicationConfig) => {
   return (req: Request, res: Response, next: NextFunction) => {

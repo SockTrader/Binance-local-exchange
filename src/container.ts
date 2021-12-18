@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { ConfigurationService } from './config';
+import { ConfigurationService } from './services/configuration.service';
 import { KlineEventHandler } from './endpoints/websocket/eventHandlers/kline';
 import { UserDataStreamEventHandler } from './endpoints/websocket/eventHandlers/userDataStream';
 import { WEBSOCKET_EVENT_HANDLER, WebsocketEventHandler } from './endpoints/websocket/websocketEventHandler';

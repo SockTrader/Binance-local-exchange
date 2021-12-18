@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import express, { Express } from 'express';
-import { ApplicationConfig } from './config';
+import { ApplicationConfig } from './services/configuration.service';
 import ApiRoutes from './endpoints/api/api.routes';
 import ServerRoutes from './endpoints/server/server.routes';
 import { verifyRequest } from './middleware/security.middleware';

@@ -8,6 +8,8 @@ import { LimitOrderMatcher } from './orderMatchers/limitOrder.matcher';
 import { MarketOrderMatcher } from './orderMatchers/marketOrder.matcher';
 import { OrderMatchingService } from './orderMatching.service';
 
+jest.mock('./configuration.service')
+
 describe('Order Matching service', () => {
   let orderMatchingService: OrderMatchingService;
   let orderStore: OrderStore;

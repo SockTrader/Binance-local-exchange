@@ -5,6 +5,8 @@ import { InternalOrder } from '../../store/order.interfaces';
 import { OrderStore } from '../../store/order.store';
 import { LimitOrderMatcher } from './limitOrder.matcher';
 
+jest.mock('../../services/configuration.service');
+
 describe('LimitOrderMatcher', () => {
 
   let orderMatcher: LimitOrderMatcher;

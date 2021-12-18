@@ -4,6 +4,8 @@ import container from '../../container';
 import { OrderStore } from '../../store/order.store';
 import { MarketOrderMatcher } from './marketOrder.matcher';
 
+jest.mock('../../services/configuration.service');
+
 describe('MarketOrderMatcher', () => {
 
   let orderMatcher: MarketOrderMatcher;

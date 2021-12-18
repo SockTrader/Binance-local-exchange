@@ -5,6 +5,8 @@ import container from '../../../container';
 import { ExchangeInfoQuery } from '../../../store/exchangeInfo.query';
 import { OrderController } from './order.controller';
 
+jest.mock('../../../services/configuration.service');
+
 describe('Order', () => {
 
   const buyOrder: NewOrderSpot = {

@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import container from '../../../container';
 import { ExchangeInfoController } from './exchangeInfo.controller';
 
-jest.mock('../../../config');
+jest.mock('../../../services/configuration.service');
 jest.mock('binance-api-node');
 
 xdescribe('ExchangeInfo', () => {

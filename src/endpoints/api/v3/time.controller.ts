@@ -1,7 +1,7 @@
 import Binance from 'binance-api-node';
 import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
-import { ConfigurationService } from '../../../config';
+import { ConfigurationService } from '../../../services/configuration.service';
 import { Controller } from '../../../controller';
 
 @injectable()

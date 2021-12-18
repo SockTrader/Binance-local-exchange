@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { promises as fs } from 'fs';
 import { inject, injectable } from 'inversify';
 import * as path from 'path';
-import { ConfigurationService } from '../../../config';
+import { ConfigurationService } from '../../../services/configuration.service';
 import { Controller } from '../../../controller';
 import { ExchangeInfoStore } from '../../../store/exchangeInfo.store';
 

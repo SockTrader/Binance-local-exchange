@@ -6,7 +6,7 @@ import { Option, program } from 'commander';
 import 'reflect-metadata';
 import { version } from '../package.json';
 import { createApplication } from './application';
-import { ConfigurationService } from './config';
+import { ConfigurationService } from './services/configuration.service';
 import container from './container';
 import WebsocketServer from './endpoints/websocket/server';
 
