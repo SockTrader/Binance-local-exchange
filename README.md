@@ -82,7 +82,6 @@ Can be used to debug or get more information about the internal state of the ser
 
 
 ## Roadmap
-- Add extra security measurements
 - Add support for additional API endpoints
 - Spot account trades
 - Margin account trades

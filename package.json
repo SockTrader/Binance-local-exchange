@@ -2,10 +2,7 @@
   "name": "@socktrader/binance-local-exchange",
   "version": "1.0.0",
   "description": "Binance local exchange",
-  "bin": {
-    "binance-local-exchange": "./build/index.js",
-    "ble": "./build/index.js"
-  },
+  "bin": "./build/index.js",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
