@@ -8,7 +8,7 @@ import { version } from '../package.json';
 import { createApplication } from './application';
 import { ConfigurationService } from './services/configuration.service';
 import container from './container';
-import WebsocketServer from './endpoints/websocket/server';
+import WebsocketServer from './endpoints/websocket/websocketServer';
 
 akitaConfig({ resettable: true });
 
@@ -45,12 +45,12 @@ program
 const configService = container.resolve(ConfigurationService);
 configService.setApplicationConfig(program.opts());
 
-const server = container.resolve(WebsocketServer);
-server.upgrade(createApplication(configService.getAll()));
+const websocketServer = container.resolve(WebsocketServer);
+const server = websocketServer.createFromExpressApp(createApplication(configService.getAll()));
 
 //start our server
-server.serverInstance?.listen(configService.get('port'), () => {
-  const address = server.serverInstance?.address();
+server.listen(configService.get('port'), () => {
+  const address = server.address();
   const port = typeof address === 'string' ? address : address?.port;
 
   console.log(`Binance local exchange is listening on port: ${port}\n`);
