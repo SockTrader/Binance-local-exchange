@@ -11,7 +11,7 @@ export const verifyRequest = (config: ApplicationConfig) => {
 THIS COULD LEAD TO SEVERE SECURITY ISSUES AND POTENTIALLY STOLEN FUNDS,
 IF YOUR SECRET API KEY HAS BEEN COMPROMISED!`;
 
-      console.warn(chalk.bgYellow(chalk.white(warning)));
+      console.warn(chalk.bgYellow(chalk.black(warning)));
       process.exit(1);
     }
 

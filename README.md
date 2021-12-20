@@ -4,12 +4,14 @@
 
 <p align="center">
   <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a>
+  <a href="https://github.com/SockTrader/Binance-local-exchange/actions/workflows/main.yml"><img src="https://github.com/SockTrader/Binance-local-exchange/actions/workflows/main.yml/badge.svg?branch=main" /></a>
+  <a href="https://codecov.io/gh/SockTrader/Binance-local-exchange"><img src="https://codecov.io/gh/SockTrader/Binance-local-exchange/branch/main/graph/badge.svg?token=5DG2K3RGEJ"/></a>
   <a href="https://codeclimate.com/github/SockTrader/Binance-local-exchange/maintainability"><img src="https://api.codeclimate.com/v1/badges/ef5537a6aa6b8cb10cba/maintainability" /></a>
   <a href="https://gitter.im/SockTrader/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/SockTrader/community.svg" alt="Gitter"></a>
 </p>
 
 
-## What is "BLE" or "Binance Local Exchange"
+## 🏦 What is "BLE" or "Binance Local Exchange"
 
 You can interact with BLE as if you would be trading with the real Binance API without taking the risk of making an actual trade.
 All orders calls will be saved in memory (as long as the server is running) and will be internally matched once the price on Binance hits the expected target.
@@ -35,7 +37,7 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 
 Still not working? Please open a [bug report](https://github.com/SockTrader/Binance-local-exchange/issues/new)
 
-## Configuration
+## ⚙️ Configuration
 
 The following configuration options can be configured either by argument or by environment variable.
 
@@ -52,7 +54,7 @@ The following configuration options can be configured either by argument or by e
 
 For example: `export PORT=8001 && npx binance-local-exchange` or `npx binance-local-exchange -p 8001`
 
-## API endpoints
+## 🪝 API endpoints
 
 | Method | Path                   | Implemented |
 |--------|------------------------|-------------|
@@ -81,14 +83,14 @@ Can be used to debug or get more information about the internal state of the ser
 | POST   | /server/match  | ✅           | { symbol: string, price: number } | Tries to match open orders.                          |
 
 
-## Roadmap
+## 🗺️ Roadmap
 - Add support for additional API endpoints
 - Spot account trades
 - Margin account trades
 - ...
 
 
-## How to contribute?
+## 💁 How to contribute?
 
 - Clone repo `git clone https://github.com/SockTrader/Binance-local-exchange`
 - Install dependencies `cd Binance-local-exchange && npm install`
@@ -97,11 +99,11 @@ Can be used to debug or get more information about the internal state of the ser
 - Open pull request
 
 
-## Contributors
+## ✨ Contributors
 <a href="https://github.com/SockTrader/Binance-local-exchange/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=SockTrader/Binance-local-exchange" />
 </a>
 
 
-## DISCLAIMER
+## ⚠️ DISCLAIMER
 Use at your own risk. Neither SockTrader nor any project contributor can be held responsible for any potential losses.

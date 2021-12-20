@@ -14,7 +14,7 @@ akitaConfig({ resettable: true });
 
 program
   .version(version)
-  .addOption(new Option('--I-KNOW-WHAT-I-AM-DOING <number>', 'removes security warnings')
+  .addOption(new Option('--I-KNOW-WHAT-I-AM-DOING', 'removes security warnings')
     .default(false)
     .env('I_KNOW_WHAT_I_AM_DOING')
   )
