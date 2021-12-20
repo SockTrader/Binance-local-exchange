@@ -9,5 +9,4 @@ config
 src
 nodemon.json
 jest*
-package.json
 tsconfig.json
