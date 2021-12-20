@@ -3,9 +3,9 @@
   "version": "1.0.4",
   "description": "Binance local exchange",
   "bin": {
-    "binance-local-exchange": "src/index.js"
+    "binance-local-exchange": "build/src/index.js"
   },
-  "main": "src/index.js",
+  "main": "build/src/index.js",
   "types": "src/index.d.ts",
   "scripts": {
     "start": "ts-node src/index.ts",

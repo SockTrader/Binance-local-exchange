@@ -1,4 +1,7 @@
+.**
 **/__mocks__/**
+**/*.spec.js
+**/*.spec.d.ts
 docs
 coverage
 scripts
@@ -6,4 +9,5 @@ config
 src
 nodemon.json
 jest*
+package.json
 tsconfig.json
