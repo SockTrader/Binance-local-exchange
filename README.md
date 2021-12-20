@@ -22,7 +22,7 @@ For example `kline` events will always be proxied to Binance so that BLE can cor
 
 ### Quick start
 
-- `npx @socktrader/binance-local-exchange`
+- `npx binance-local-exchange`
 - Make api calls or point your trading bot to: `http://localhost:8000`
 
 
@@ -50,7 +50,7 @@ The following configuration options can be configured either by argument or by e
 | --I-KNOW-WHAT-I-AM-DOING    | I_KNOW_WHAT_I_AM_DOING | removes all security warnings       |
 | -h, --help                  |                        | display help for command            |
 
-For example: `export PORT=8001 && npx @socktrader/binance-local-exchange` or `npx @socktrader/binance-local-exchange -p 8001`
+For example: `export PORT=8001 && npx binance-local-exchange` or `npx binance-local-exchange -p 8001`
 
 ## API endpoints
 
