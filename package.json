@@ -13,11 +13,12 @@
     "watch": "nodemon",
     "build": "rimraf ./build && npx tsc",
     "test": "jest --no-cache --coverage",
+    "copy-files": "copyfiles -u 1 src/data/* build/src",
     "publish:dry-run": "npm publish --dry-run --access public",
     "publish:patch": "npm version patch && npm publish --access public",
     "publish:minor": "npm version minor && npm publish --access public",
     "publish:major": "npm version major && npm publish --access public",
-    "prepack": "npm run build"
+    "prepack": "npm run build && npm run copy-files"
   },
   "repository": {
     "type": "git",
@@ -71,6 +72,7 @@
     "@types/uuid": "^8.3.3",
     "@types/ws": "^8.2.2",
     "concurrently": "^6.4.0",
+    "copyfiles": "^2.4.1",
     "jest": "^27.4.4",
     "jest-extended": "^1.2.0",
     "nodemon": "^2.0.15",
