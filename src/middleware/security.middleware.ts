@@ -11,7 +11,7 @@ export const verifyRequest = (config: ApplicationConfig) => {
 THIS COULD LEAD TO SEVERE SECURITY ISSUES AND POTENTIALLY STOLEN FUNDS,
 IF YOUR SECRET API KEY HAS BEEN COMPROMISED!`;
 
-      console.warn(chalk.bgYellow(chalk.black(warning)));
+      console.warn(chalk.bgYellowBright.black(warning));
       process.exit(1);
     }
 
@@ -20,7 +20,7 @@ IF YOUR SECRET API KEY HAS BEEN COMPROMISED!`;
 THIS IS A MAJOR SECURITY RISK AND COULD POTENTIALLY LEAD TO STOLEN FUNDS.
 WE HIGHLY RECOMMEND TO STOP SENDING THE SIGNED SIGNATURE OR USE A FAKE API KEY AND SECRET COMBINATION.`;
 
-      console.error(chalk.bgRed(chalk.white(error)));
+      console.error(chalk.bgRed.white(error));
       process.exit(1);
 
     }

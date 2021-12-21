@@ -59,6 +59,6 @@ server.listen(configService.get('port'), () => {
     const msg = `Don't send any API keys or signed signatures.
 Binance local exchange doesn't need any of these to operate.`;
 
-    console.warn(chalk.bgYellow(chalk.white(msg)));
+    console.warn(chalk.bgYellowBright.black(msg));
   }
 });
