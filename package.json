@@ -1,6 +1,6 @@
 {
   "name": "binance-local-exchange",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Binance local exchange",
   "bin": {
     "binance-local-exchange": "build/src/index.js"
