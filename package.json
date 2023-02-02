@@ -47,7 +47,7 @@
   },
   "homepage": "https://github.com/SockTrader/Binance-local-exchange#readme",
   "dependencies": {
-    "@datorama/akita": "^6.2.4",
+    "@datorama/akita": "^8.0.0",
     "@swc/core": "^1.2.119",
     "@swc/jest": "^0.2.12",
     "binance-api-node": "^0.11.28",
